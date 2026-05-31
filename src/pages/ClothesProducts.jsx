@@ -62,6 +62,7 @@ export default function ClothesProducts() {
         products={clothesProducts}
         onRemove={removeItem}
         onClear={() => setSelected([])}
+        categoryName="Clothes"
       />
     </div>
   );

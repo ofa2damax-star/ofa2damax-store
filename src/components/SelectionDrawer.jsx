@@ -1,11 +1,25 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Sparkles, Trash2 } from "lucide-react";
+import { X, Sparkles, Trash2, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import SubmitConfirmation from "@/components/SubmitConfirmation";
 
-export default function SelectionDrawer({ isOpen, onClose, selectedItems, products, onRemove, onClear }) {
+export default function SelectionDrawer({ isOpen, onClose, selectedItems, products, onRemove, onClear, categoryName }) {
   const selectedProducts = products.filter(p => selectedItems.includes(p.id));
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const handleSubmit = () => {
+    onClose();
+    setShowConfirmation(true);
+  };
+
+  const handleConfirmationClose = () => {
+    setShowConfirmation(false);
+    onClear();
+  };
 
   return (
+    <>
     <AnimatePresence>
       {isOpen && (
         <>
@@ -75,10 +89,27 @@ export default function SelectionDrawer({ isOpen, onClose, selectedItems, produc
                   </div>
                 )}
               </div>
+
+              {selectedProducts.length > 0 && (
+                <Button
+                  onClick={handleSubmit}
+                  className="w-full rounded-2xl h-12 font-extrabold text-base gap-2 mt-2"
+                >
+                  <Send className="w-4 h-4" /> Send to Office! 🚀
+                </Button>
+              )}
             </div>
           </motion.div>
         </>
       )}
     </AnimatePresence>
+
+    <SubmitConfirmation
+      isOpen={showConfirmation}
+      onClose={handleConfirmationClose}
+      selectedProducts={selectedProducts}
+      categoryName={categoryName || "item"}
+    />
+    </>
   );
 }

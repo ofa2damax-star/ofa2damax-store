@@ -76,6 +76,7 @@ export default function FeminineHygiene() {
         products={feminineProducts}
         onRemove={removeItem}
         onClear={() => setSelected([])}
+        categoryName="Feminine Hygiene"
       />
     </div>
   );
