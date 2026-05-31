@@ -68,11 +68,18 @@ export default function Home() {
           transition={{ delay: 0.05 }}
           className="bg-gradient-to-br from-primary/10 to-accent/20 rounded-3xl p-5 border border-primary/20 text-center"
         >
-          <img
-            src="https://media.base44.com/images/public/6a1b94aa3da2d1391351474e/8eb0be84a_65D4C14F-6DC7-4C0B-8C73-800AAAD84CF4.jpeg"
-            alt="OFA2DAMAX Logo"
-            className="w-28 h-28 object-contain mx-auto mb-2 drop-shadow-md"
-          />
+          <div className="flex items-center justify-center gap-4 mb-2">
+            <img
+              src="https://media.base44.com/images/public/6a1b94aa3da2d1391351474e/8eb0be84a_65D4C14F-6DC7-4C0B-8C73-800AAAD84CF4.jpeg"
+              alt="OFA2DAMAX Logo"
+              className="w-24 h-24 object-contain drop-shadow-md rounded-xl"
+            />
+            <img
+              src="https://media.base44.com/images/public/6a1b94aa3da2d1391351474e/c3fa25a5d_Image1.jpg"
+              alt="Unconditional Love N&N Logo"
+              className="w-24 h-24 object-contain drop-shadow-md rounded-xl"
+            />
+          </div>
           <h2 className="text-2xl font-black tracking-tight text-foreground mb-1">OFA2DAMAX</h2>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mt-3">
             <a
