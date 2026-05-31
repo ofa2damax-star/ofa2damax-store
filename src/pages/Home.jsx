@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Sparkles, ClipboardList } from "lucide-react";
+import { Sparkles, ClipboardList, Phone, Mail } from "lucide-react";
 import HomeCategoryCard from "@/components/HomeCategoryCard";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -57,6 +57,43 @@ export default function Home() {
           className="absolute top-16 right-8 text-2xl opacity-40"
         >
           ✨
+        </motion.div>
+      </div>
+
+      {/* Business Header */}
+      <div className="px-4 max-w-lg mx-auto -mt-2 mb-2">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="bg-gradient-to-br from-primary/10 to-accent/20 rounded-3xl p-5 border border-primary/20 text-center"
+        >
+          <h2 className="text-2xl font-black tracking-tight text-foreground mb-1">OFA2DAMAX</h2>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mt-3">
+            <a
+              href="tel:8015298857"
+              className="flex items-center gap-2 text-sm font-bold text-primary hover:underline"
+            >
+              <Phone className="w-4 h-4" />
+              (801) 529-8857
+            </a>
+            <span className="hidden sm:block text-muted-foreground">·</span>
+            <a
+              href="mailto:ofa2damax@gmail.com"
+              className="flex items-center gap-2 text-sm font-bold text-primary hover:underline"
+            >
+              <Mail className="w-4 h-4" />
+              ofa2damax@gmail.com
+            </a>
+            <span className="hidden sm:block text-muted-foreground">·</span>
+            <a
+              href="mailto:jason@ofa2damax.com"
+              className="flex items-center gap-2 text-sm font-bold text-primary hover:underline"
+            >
+              <Mail className="w-4 h-4" />
+              jason@ofa2damax.com
+            </a>
+          </div>
         </motion.div>
       </div>
 
