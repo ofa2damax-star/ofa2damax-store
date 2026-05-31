@@ -109,6 +109,22 @@ export default function Home() {
         </motion.div>
       </div>
 
+      {/* Emergency Panic Button */}
+      <div className="px-4 max-w-lg mx-auto mb-6">
+        <motion.a
+          href="tel:911"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ delay: 0.2 }}
+          className="flex items-center justify-center gap-3 w-full bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-black text-xl rounded-2xl py-5 shadow-lg shadow-red-500/40 border-4 border-red-400"
+        >
+          <span className="text-2xl">🚨</span>
+          EMERGENCY — CALL 911
+          <span className="text-2xl">🚨</span>
+        </motion.a>
+      </div>
+
       {/* Categories */}
       <div className="px-4 pb-12 max-w-lg mx-auto space-y-4">
         <HomeCategoryCard
