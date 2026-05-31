@@ -1,0 +1,29 @@
+{
+  "name": "Selection",
+  "type": "object",
+  "properties": {
+    "child_name": {
+      "type": "string",
+      "description": "Name of the child"
+    },
+    "items": {
+      "type": "array",
+      "description": "Selected item IDs",
+      "items": {
+        "type": "string"
+      }
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "hygiene",
+        "clothes"
+      ],
+      "description": "Category of selection"
+    }
+  },
+  "required": [
+    "items",
+    "category"
+  ]
+}
