@@ -8,20 +8,22 @@ import PanicButton from "@/components/PanicButton";
 export default function Home() {
   return (
     <div className="min-h-screen bg-background relative">
-      {/* Full-page N&N logo watermark background */}
-      <div
-        className="fixed inset-0 pointer-events-none z-0"
-        style={{
-          backgroundImage: `url(https://media.base44.com/images/public/6a1b94aa3da2d1391351474e/c3fa25a5d_Image1.jpg)`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          opacity: 0.08,
-        }}
-      />
+      {/* Black background base */}
+      <div className="fixed inset-0 bg-black z-0" />
 
       {/* Hero */}
       <div className="relative overflow-hidden px-4 pt-10 pb-6 md:pt-14 md:pb-8 z-10">
+        {/* N&N logo behind the hero text */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: `url(https://media.base44.com/images/public/6a1b94aa3da2d1391351474e/c3fa25a5d_Image1.jpg)`,
+            backgroundSize: "contain",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            opacity: 0.18,
+          }}
+        />
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -35,14 +37,14 @@ export default function Home() {
           >
             🐾
           </motion.div>
-          <p className="text-sm font-black uppercase tracking-widest text-primary mb-1">Kearns High School</p>
-          <h1 className="text-3xl md:text-4xl font-black text-foreground mb-2">
+          <p className="text-sm font-black uppercase tracking-widest text-yellow-400 mb-1">Kearns High School</p>
+          <h1 className="text-3xl md:text-4xl font-black text-yellow-400 mb-2">
             Pick Your Stuff!
           </h1>
-          <p className="text-muted-foreground font-semibold text-base md:text-lg flex items-center justify-center gap-2">
-            <Sparkles className="w-4 h-4 text-accent" />
+          <p className="text-yellow-300 font-semibold text-base md:text-lg flex items-center justify-center gap-2">
+            <Sparkles className="w-4 h-4 text-yellow-400" />
             Go Cougars! 🐆
-            <Sparkles className="w-4 h-4 text-accent" />
+            <Sparkles className="w-4 h-4 text-yellow-400" />
           </p>
 
           {/* My Info button */}
@@ -80,7 +82,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="bg-gradient-to-br from-green-50 to-yellow-50 rounded-3xl p-5 border-2 border-green-300 text-center shadow-lg"
+          className="bg-black/60 backdrop-blur-sm rounded-3xl p-5 border-2 border-yellow-500/60 text-center shadow-lg"
         >
           <div className="flex items-center justify-center gap-4 mb-2">
             <img
@@ -94,7 +96,7 @@ export default function Home() {
               className="w-24 h-24 object-contain drop-shadow-md rounded-xl"
             />
           </div>
-          <h2 className="text-2xl font-black tracking-tight text-foreground mb-1">OFA2DAMAX</h2>
+          <h2 className="text-2xl font-black tracking-tight text-yellow-400 mb-1">OFA2DAMAX</h2>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mt-3">
             <a
               href="tel:8015298857"

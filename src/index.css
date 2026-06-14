@@ -7,8 +7,8 @@
 @layer base {
   :root {
     --font-nunito: 'Nunito', sans-serif;
-    --background: 120 30% 97%;
-    --foreground: 120 40% 10%;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 95%;
     --card: 0 0% 100%;
     --card-foreground: 120 40% 10%;
     --popover: 0 0% 100%;
