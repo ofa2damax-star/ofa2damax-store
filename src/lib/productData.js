@@ -43,6 +43,7 @@ export const sportsProducts = [
   { id: "sports_water_bottle", name: "Water Bottle", emoji: "🥤", color: "bg-yellow-400", borderColor: "border-green-700" },
   { id: "sports_gloves", name: "Sports Gloves", emoji: "🥊", color: "bg-green-800", borderColor: "border-yellow-400" },
   { id: "sports_knee_pads", name: "Knee Pads", emoji: "🦵", color: "bg-yellow-400", borderColor: "border-green-700" },
+  { id: "mouthpiece", name: "Mouth Piece", emoji: "🦷", color: "bg-yellow-400", borderColor: "border-green-700" },
   { id: "sports_equipment", name: "Equipment Needed", emoji: "🏆", color: "bg-green-700", borderColor: "border-yellow-400" },
 ];
 
