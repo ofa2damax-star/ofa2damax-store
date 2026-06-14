@@ -20,7 +20,10 @@ export default function CategoryHeader({ title, emoji, selectedCount, onViewPick
           </Link>
           <div className="flex items-center gap-2">
             <span className="text-2xl">{emoji}</span>
-            <h1 className="text-lg font-extrabold">{title}</h1>
+            <div>
+              <h1 className="text-lg font-extrabold leading-tight">{title}</h1>
+              <p className="text-xs font-black text-yellow-400 uppercase tracking-widest leading-tight">Go Cougars! · Kearns</p>
+            </div>
           </div>
         </div>
         <Button
