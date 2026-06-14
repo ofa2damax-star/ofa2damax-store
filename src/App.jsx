@@ -1,7 +1,9 @@
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
+import BottomNav from '@/components/BottomNav';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
@@ -18,6 +20,24 @@ import FeminineHygiene from '@/pages/FeminineHygiene';
 import SchoolClothes from '@/pages/SchoolClothes';
 import CommandCenter from '@/pages/CommandCenter';
 import SportsGear from '@/pages/SportsGear';
+
+const AnimatedRoutes = ({ children }) => {
+  const location = useLocation();
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={location.pathname}
+        initial={{ x: 30, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        exit={{ x: -30, opacity: 0 }}
+        transition={{ duration: 0.2, ease: "easeInOut" }}
+        style={{ position: "relative", width: "100%" }}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
+  );
+};
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -40,23 +60,28 @@ const AuthenticatedApp = () => {
   }
 
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
-      <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/hygiene" element={<HygieneProducts />} />
-        <Route path="/clothes" element={<ClothesProducts />} />
-        <Route path="/feminine-hygiene" element={<FeminineHygiene />} />
-        <Route path="/school-clothes" element={<SchoolClothes />} />
-        <Route path="/sports-gear" element={<SportsGear />} />
-        <Route path="/my-info" element={<MyProfile />} />
-        <Route path="/command-center" element={<CommandCenter />} />
-      </Route>
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
+    <>
+      <AnimatedRoutes>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/hygiene" element={<HygieneProducts />} />
+            <Route path="/clothes" element={<ClothesProducts />} />
+            <Route path="/feminine-hygiene" element={<FeminineHygiene />} />
+            <Route path="/school-clothes" element={<SchoolClothes />} />
+            <Route path="/sports-gear" element={<SportsGear />} />
+            <Route path="/my-info" element={<MyProfile />} />
+            <Route path="/command-center" element={<CommandCenter />} />
+          </Route>
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </AnimatedRoutes>
+      <BottomNav />
+    </>
   );
 };
 

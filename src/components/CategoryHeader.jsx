@@ -10,6 +10,7 @@ export default function CategoryHeader({ title, emoji, selectedCount, onViewPick
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       className="sticky top-0 z-10 bg-background/80 backdrop-blur-xl border-b border-border/50 px-4 py-3"
+      style={{ paddingTop: "calc(0.75rem + env(safe-area-inset-top))" }}
     >
       <div className="max-w-2xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-3">

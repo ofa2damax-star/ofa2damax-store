@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Save, CheckCircle2, User, MapPin, School, MessageSquare } from "lucide-react";
+import { ArrowLeft, Save, CheckCircle2, User, MapPin, School, MessageSquare, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { base44 } from "@/api/base44Client";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel,
+  AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+  AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const GRADES = ["Kindergarten", "1st Grade", "2nd Grade", "3rd Grade", "4th Grade", "5th Grade", "6th Grade", "7th Grade", "8th Grade", "9th Grade", "10th Grade", "11th Grade", "12th Grade"];
 const CLOTHES_SIZES = ["2T", "3T", "4T", "XS (4-5)", "S (6-7)", "M (8-10)", "L (10-12)", "XL (14-16)", "XXL (18-20)", "Adult XS", "Adult S", "Adult M", "Adult L", "Adult XL", "Adult XXL"];
@@ -15,6 +20,7 @@ const SHOE_SIZES = ["4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", 
 export default function MyProfile() {
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const [form, setForm] = useState({
     full_name: "",
@@ -50,7 +56,7 @@ export default function MyProfile() {
   return (
     <div className="min-h-screen bg-background pb-12">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-xl border-b border-border/50 px-4 py-3">
+      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-xl border-b border-border/50 px-4 py-3" style={{ paddingTop: "calc(0.75rem + env(safe-area-inset-top))" }}>
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link to="/">
@@ -284,11 +290,12 @@ export default function MyProfile() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.25 }}
+          className="space-y-3"
         >
           <Button
             onClick={handleSave}
             disabled={loading}
-            className="w-full rounded-2xl h-12 text-base font-extrabold gap-2"
+            className="w-full rounded-2xl h-12 text-base font-extrabold gap-2 select-none"
           >
             {saved ? (
               <>
@@ -300,6 +307,32 @@ export default function MyProfile() {
               </>
             )}
           </Button>
+
+          {/* Delete Account */}
+          <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" className="w-full rounded-2xl h-12 text-base font-extrabold gap-2 select-none">
+                <Trash2 className="w-5 h-5" /> Delete Account
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete your account?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This will permanently delete your account and all your data. This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  onClick={() => base44.auth.logout()}
+                >
+                  Yes, Delete My Account
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </motion.div>
 
       </div>
