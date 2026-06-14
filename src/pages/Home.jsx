@@ -134,12 +134,15 @@ export default function Home() {
             </div>
           </div>
 
-          {/* N&N logo right */}
-          <img
-            src="https://media.base44.com/images/public/6a1b94aa3da2d1391351474e/c3fa25a5d_Image1.jpg"
-            alt="N&N Logo"
-            className="w-16 h-16 object-contain rounded-xl"
-          />
+          {/* OFAS logo right */}
+          <div className="flex flex-col items-center gap-0.5">
+            <img
+              src="https://media.base44.com/images/public/6a1b94aa3da2d1391351474e/8eb0be84a_65D4C14F-6DC7-4C0B-8C73-800AAAD84CF4.jpeg"
+              alt="OFAS"
+              className="w-16 h-16 object-contain rounded-xl"
+            />
+            <span className="text-yellow-300 text-xs font-black tracking-widest uppercase">OFAS</span>
+          </div>
         </div>
       </motion.div>
 
