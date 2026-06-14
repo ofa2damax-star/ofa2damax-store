@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ShoppingBag, School } from "lucide-react";
+import { ArrowLeft, ShoppingBag } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Check, X } from "lucide-react";
 import SelectionDrawer from "@/components/SelectionDrawer";
@@ -12,26 +10,23 @@ import SelectionDrawer from "@/components/SelectionDrawer";
 const SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
 
 const schoolItems = [
-  { id: "polo_shirt", name: "Polo Shirt", emoji: "👔", color: "bg-blue-100", borderColor: "border-blue-300" },
-  { id: "uniform_pants", name: "Uniform Pants", emoji: "👖", color: "bg-indigo-100", borderColor: "border-indigo-300" },
-  { id: "uniform_skirt", name: "Uniform Skirt", emoji: "👗", color: "bg-pink-100", borderColor: "border-pink-300" },
-  { id: "school_hoodie", name: "School Hoodie", emoji: "🧥", color: "bg-purple-100", borderColor: "border-purple-300" },
-  { id: "school_jacket", name: "School Jacket", emoji: "🫱", color: "bg-sky-100", borderColor: "border-sky-300" },
-  { id: "school_tshirt", name: "School T-Shirt", emoji: "👕", color: "bg-teal-100", borderColor: "border-teal-300" },
-  { id: "gym_shorts", name: "Gym Shorts", emoji: "🩳", color: "bg-green-100", borderColor: "border-green-300" },
-  { id: "gym_shirt", name: "Gym Shirt", emoji: "🏃", color: "bg-lime-100", borderColor: "border-lime-300" },
-  { id: "school_hat", name: "School Cap", emoji: "🧢", color: "bg-yellow-100", borderColor: "border-yellow-300" },
-  { id: "school_bag", name: "School Bag", emoji: "🎒", color: "bg-orange-100", borderColor: "border-orange-300" },
-  { id: "school_socks", name: "School Socks", emoji: "🧦", color: "bg-rose-100", borderColor: "border-rose-300" },
-  { id: "school_shoes", name: "School Shoes", emoji: "👟", color: "bg-amber-100", borderColor: "border-amber-300" },
+  { id: "polo_shirt", name: "Polo Shirt", emoji: "👔", color: "bg-green-700", borderColor: "border-yellow-400" },
+  { id: "uniform_pants", name: "Uniform Pants", emoji: "👖", color: "bg-green-800", borderColor: "border-yellow-400" },
+  { id: "uniform_skirt", name: "Uniform Skirt", emoji: "👗", color: "bg-yellow-400", borderColor: "border-green-700" },
+  { id: "school_hoodie", name: "School Hoodie", emoji: "🧥", color: "bg-green-700", borderColor: "border-yellow-400" },
+  { id: "school_jacket", name: "School Jacket", emoji: "🫱", color: "bg-green-800", borderColor: "border-yellow-400" },
+  { id: "school_tshirt", name: "School T-Shirt", emoji: "👕", color: "bg-yellow-400", borderColor: "border-green-700" },
+  { id: "gym_shorts", name: "Gym Shorts", emoji: "🩳", color: "bg-green-700", borderColor: "border-yellow-400" },
+  { id: "gym_shirt", name: "Gym Shirt", emoji: "🏃", color: "bg-yellow-400", borderColor: "border-green-700" },
+  { id: "school_hat", name: "School Cap", emoji: "🧢", color: "bg-green-800", borderColor: "border-yellow-400" },
+  { id: "school_bag", name: "School Bag", emoji: "🎒", color: "bg-yellow-400", borderColor: "border-green-700" },
+  { id: "school_socks", name: "School Socks", emoji: "🧦", color: "bg-green-700", borderColor: "border-yellow-400" },
+  { id: "school_shoes", name: "School Shoes", emoji: "👟", color: "bg-green-800", borderColor: "border-yellow-400" },
 ];
 
 export default function SchoolClothes() {
   const [selected, setSelected] = useState([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [schoolName, setSchoolName] = useState("");
-  const [schoolColors, setSchoolColors] = useState("");
-  const [logoRequest, setLogoRequest] = useState("");
   const [sizeSelections, setSizeSelections] = useState({});
 
   const toggleItem = (id) => {
@@ -83,45 +78,15 @@ export default function SchoolClothes() {
 
       <div className="px-4 pt-5 max-w-2xl mx-auto space-y-6">
 
-        {/* School Logo Info */}
+        {/* Kearns Cougars Banner */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-br from-sky-50 to-indigo-50 rounded-3xl p-5 border border-sky-200"
+          className="bg-gradient-to-br from-green-700 to-green-800 rounded-3xl p-5 border-2 border-yellow-400 text-center shadow-lg"
         >
-          <div className="flex items-center gap-2 mb-4">
-            <School className="w-5 h-5 text-sky-600" />
-            <h2 className="font-extrabold text-base text-sky-900">School Logo Details</h2>
-          </div>
-          <div className="space-y-3">
-            <div>
-              <Label className="font-bold text-sm mb-1 block">School Name</Label>
-              <Input
-                placeholder="e.g. Lincoln Middle School"
-                value={schoolName}
-                onChange={e => setSchoolName(e.target.value)}
-                className="rounded-xl"
-              />
-            </div>
-            <div>
-              <Label className="font-bold text-sm mb-1 block">School Colors</Label>
-              <Input
-                placeholder="e.g. Navy Blue & Gold"
-                value={schoolColors}
-                onChange={e => setSchoolColors(e.target.value)}
-                className="rounded-xl"
-              />
-            </div>
-            <div>
-              <Label className="font-bold text-sm mb-1 block">Logo / Design Request</Label>
-              <Input
-                placeholder="e.g. School mascot on front, name on back"
-                value={logoRequest}
-                onChange={e => setLogoRequest(e.target.value)}
-                className="rounded-xl"
-              />
-            </div>
-          </div>
+          <div className="text-4xl mb-2">🐆</div>
+          <h2 className="font-black text-xl text-yellow-400 tracking-wide">Kearns Cougars</h2>
+          <p className="text-yellow-300 font-bold text-sm mt-1">School Clothes · Green & Gold</p>
         </motion.div>
 
         {/* Items Grid */}
@@ -160,7 +125,7 @@ export default function SchoolClothes() {
                     </motion.div>
                   )}
                   <span className="text-4xl drop-shadow-sm">{product.emoji}</span>
-                  <span className="text-xs font-bold text-foreground/80 text-center leading-tight">
+                  <span className={`text-xs font-bold text-center leading-tight ${product.color.includes('yellow') ? 'text-green-900' : 'text-white'}`}>
                     {product.name}
                   </span>
                 </motion.button>
