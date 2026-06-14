@@ -72,8 +72,8 @@ export default function MyProfile() {
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link to="/">
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <ArrowLeft className="w-5 h-5" />
+              <Button variant="ghost" size="icon" className="rounded-full" aria-label="Go back to home">
+                <ArrowLeft className="w-5 h-5" aria-hidden="true" />
               </Button>
             </Link>
             <div className="flex items-center gap-2">
@@ -86,8 +86,9 @@ export default function MyProfile() {
             disabled={loading}
             className="rounded-full gap-2 font-bold"
             size="sm"
+            aria-label={saved ? "Profile saved" : "Save profile"}
           >
-            {saved ? <CheckCircle2 className="w-4 h-4" /> : <Save className="w-4 h-4" />}
+            {saved ? <CheckCircle2 className="w-4 h-4" aria-hidden="true" /> : <Save className="w-4 h-4" aria-hidden="true" />}
             {saved ? "Saved!" : "Save"}
           </Button>
         </div>
@@ -309,22 +310,29 @@ export default function MyProfile() {
           {/* Delete Account */}
           <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
             <AlertDialogTrigger asChild>
-              <Button variant="destructive" className="w-full rounded-2xl h-12 text-base font-extrabold gap-2 select-none">
-                <Trash2 className="w-5 h-5" /> Delete Account
+              <Button variant="destructive" className="w-full rounded-2xl h-12 text-base font-extrabold gap-2 select-none" aria-label="Delete your account permanently">
+                <Trash2 className="w-5 h-5" aria-hidden="true" /> Delete Account
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Delete your account?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This will permanently delete your account and all your data. This action cannot be undone.
+                  This will permanently delete your account and all your data including your profile, selections, and submissions. This action cannot be undone.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction
                   className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                  onClick={() => base44.auth.logout()}
+                  onClick={async () => {
+                    try {
+                      await base44.auth.deleteMe();
+                      base44.auth.logout();
+                    } catch (error) {
+                      console.error('Failed to delete account:', error);
+                    }
+                  }}
                 >
                   Yes, Delete My Account
                 </AlertDialogAction>

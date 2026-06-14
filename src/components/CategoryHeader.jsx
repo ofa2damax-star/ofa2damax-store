@@ -15,8 +15,8 @@ export default function CategoryHeader({ title, emoji, selectedCount, onViewPick
       <div className="max-w-2xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link to="/">
-            <Button variant="ghost" size="icon" className="rounded-full">
-              <ArrowLeft className="w-5 h-5" />
+            <Button variant="ghost" size="icon" className="rounded-full" aria-label="Go back to home">
+              <ArrowLeft className="w-5 h-5" aria-hidden="true" />
             </Button>
           </Link>
           <div className="flex items-center gap-2">
@@ -32,8 +32,9 @@ export default function CategoryHeader({ title, emoji, selectedCount, onViewPick
           size="sm"
           className="rounded-full gap-2 font-bold"
           onClick={onViewPicks}
+          aria-label={`View my picks: ${selectedCount} items selected`}
         >
-          <ShoppingBag className="w-4 h-4" />
+          <ShoppingBag className="w-4 h-4" aria-hidden="true" />
           My Picks
           {selectedCount > 0 && (
             <Badge className="bg-primary text-primary-foreground rounded-full px-2 py-0 text-xs">

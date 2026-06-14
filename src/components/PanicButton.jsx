@@ -24,10 +24,11 @@ export default function PanicButton() {
         animate={pressCount === 1 ? { scale: [1, 1.15, 1], backgroundColor: ["#dc2626", "#ff0000", "#dc2626"] } : {}}
         transition={{ duration: 0.3 }}
         className="w-16 h-16 rounded-full bg-red-600 border-4 border-red-400 shadow-lg shadow-red-500/50 flex items-center justify-center text-2xl active:bg-red-800"
+        aria-label="Emergency 911 button - double tap to call"
       >
-        🚨
+        <span aria-hidden="true">🚨</span>
       </motion.button>
-      <span className="text-[10px] font-black text-red-600 text-center leading-tight w-16">
+      <span className="text-xs font-black text-red-600 text-center leading-tight w-16">
         {pressCount === 1 ? "PRESS\nAGAIN!" : "911"}
       </span>
     </div>

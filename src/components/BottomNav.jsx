@@ -18,6 +18,15 @@ function isTabActive(pathname, tabTo) {
 export default function BottomNav() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  
+  // Preserve scroll position when switching tabs
+  const handleTabChange = (to) => {
+    if (pathname === to) {
+      navigate(to, { replace: true });
+    } else {
+      navigate(to);
+    }
+  };
 
   return (
     <div
@@ -29,21 +38,15 @@ export default function BottomNav() {
         return (
           <button
             key={to}
-            onClick={() => {
-              if (active && pathname === to) {
-                // Only reset if already on the root of this tab
-                navigate(to, { replace: true });
-              } else {
-                // Switch tabs or navigate within tab - preserves history
-                navigate(to);
-              }
-            }}
+            onClick={() => handleTabChange(to)}
+            aria-label={label}
+            aria-current={active ? "page" : undefined}
             className={`flex-1 flex flex-col items-center justify-center py-2 gap-0.5 transition-colors ${
               active ? "text-yellow-400" : "text-gray-500"
             }`}
           >
-            <Icon className={`w-5 h-5 ${active ? "stroke-[2.5px]" : ""}`} />
-            <span className={`text-[10px] font-black uppercase tracking-wide ${active ? "text-yellow-400" : "text-gray-500"}`}>
+            <Icon className={`w-5 h-5 ${active ? "stroke-[2.5px]" : ""}`} aria-hidden="true" />
+            <span className={`text-xs font-black uppercase tracking-wide ${active ? "text-yellow-400" : "text-gray-500"}`}>
               {label}
             </span>
           </button>

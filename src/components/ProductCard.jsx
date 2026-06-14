@@ -7,6 +7,8 @@ export default function ProductCard({ product, isSelected, onToggle }) {
       whileTap={{ scale: 0.92 }}
       whileHover={{ scale: 1.05 }}
       onClick={() => onToggle(product.id)}
+      aria-label={`${product.name} - ${isSelected ? 'selected' : 'not selected'}`}
+      aria-pressed={isSelected}
       className={`relative flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border-3 transition-all duration-200 shadow-sm
         ${product.color} 
         ${isSelected 
@@ -19,12 +21,13 @@ export default function ProductCard({ product, isSelected, onToggle }) {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full p-1 shadow-md"
+          aria-hidden="true"
         >
           <Check className="w-3.5 h-3.5" strokeWidth={3} />
         </motion.div>
       )}
-      <span className="text-4xl md:text-5xl drop-shadow-sm">{product.emoji}</span>
-      <span className={`text-xs md:text-sm font-bold text-center leading-tight ${product.color?.includes('yellow') ? 'text-green-900' : 'text-white'}`} style={product.color?.includes('yellow') ? {} : { color: 'white' }}>
+      <span className="text-4xl md:text-5xl drop-shadow-sm" aria-hidden="true">{product.emoji}</span>
+      <span className={`text-sm md:text-base font-bold text-center leading-tight ${product.color?.includes('yellow') ? 'text-green-900' : 'text-white'}`} style={product.color?.includes('yellow') ? {} : { color: 'white' }}>
         {product.name}
       </span>
     </motion.button>
