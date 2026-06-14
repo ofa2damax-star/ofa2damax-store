@@ -76,54 +76,43 @@ export default function Home() {
         </motion.div>
       </div>
 
-      {/* Business Header */}
-      <div className="px-4 max-w-lg mx-auto -mt-2 mb-2 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.05 }}
-          className="bg-black/60 backdrop-blur-sm rounded-3xl p-5 border-2 border-yellow-500/60 text-center shadow-lg"
-        >
-          <div className="flex items-center justify-center gap-4 mb-2">
-            <img
-              src="https://media.base44.com/images/public/6a1b94aa3da2d1391351474e/8eb0be84a_65D4C14F-6DC7-4C0B-8C73-800AAAD84CF4.jpeg"
-              alt="OFA2DAMAX Logo"
-              className="w-24 h-24 object-contain drop-shadow-md rounded-xl"
-            />
-            <img
-              src="https://media.base44.com/images/public/6a1b94aa3da2d1391351474e/c3fa25a5d_Image1.jpg"
-              alt="Unconditional Love N&N Logo"
-              className="w-24 h-24 object-contain drop-shadow-md rounded-xl"
-            />
+      {/* Full-width green top parapet banner */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.05 }}
+        className="w-full bg-green-700 border-b-4 border-yellow-400 relative z-10 -mt-2 mb-4 shadow-xl"
+      >
+        <div className="flex items-center justify-between px-4 py-3 max-w-2xl mx-auto">
+          {/* OFA2DAMAX logo left */}
+          <img
+            src="https://media.base44.com/images/public/6a1b94aa3da2d1391351474e/8eb0be84a_65D4C14F-6DC7-4C0B-8C73-800AAAD84CF4.jpeg"
+            alt="OFA2DAMAX Logo"
+            className="w-16 h-16 object-contain rounded-xl"
+          />
+
+          {/* Center text */}
+          <div className="flex-1 text-center px-3">
+            <p className="text-yellow-300 text-xs font-black uppercase tracking-widest leading-tight">Unconditional Love</p>
+            <h2 className="text-white text-2xl md:text-3xl font-black tracking-tight leading-tight">OFA2DAMAX</h2>
+            <div className="flex items-center justify-center gap-3 mt-1 flex-wrap">
+              <a href="tel:8015298857" className="flex items-center gap-1 text-yellow-200 text-xs font-bold hover:text-white transition-colors">
+                <Phone className="w-3 h-3" />(801) 529-8857
+              </a>
+              <a href="mailto:ofa2damax@gmail.com" className="flex items-center gap-1 text-yellow-200 text-xs font-bold hover:text-white transition-colors">
+                <Mail className="w-3 h-3" />ofa2damax@gmail.com
+              </a>
+            </div>
           </div>
-          <h2 className="text-2xl font-black tracking-tight text-yellow-400 mb-1">OFA2DAMAX</h2>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mt-3">
-            <a
-              href="tel:8015298857"
-              className="flex items-center gap-2 text-sm font-bold text-primary hover:underline"
-            >
-              <Phone className="w-4 h-4" />
-              (801) 529-8857
-            </a>
-            <span className="hidden sm:block text-muted-foreground">·</span>
-            <a
-              href="mailto:ofa2damax@gmail.com"
-              className="flex items-center gap-2 text-sm font-bold text-primary hover:underline"
-            >
-              <Mail className="w-4 h-4" />
-              ofa2damax@gmail.com
-            </a>
-            <span className="hidden sm:block text-muted-foreground">·</span>
-            <a
-              href="mailto:jason@ofa2damax.com"
-              className="flex items-center gap-2 text-sm font-bold text-primary hover:underline"
-            >
-              <Mail className="w-4 h-4" />
-              jason@ofa2damax.com
-            </a>
-          </div>
-        </motion.div>
-      </div>
+
+          {/* N&N logo right */}
+          <img
+            src="https://media.base44.com/images/public/6a1b94aa3da2d1391351474e/c3fa25a5d_Image1.jpg"
+            alt="N&N Logo"
+            className="w-16 h-16 object-contain rounded-xl"
+          />
+        </div>
+      </motion.div>
 
       {/* Emergency Panic Button - fixed right side, double tap to call */}
       <PanicButton />
