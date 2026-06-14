@@ -3,10 +3,11 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import BottomNav from '@/components/BottomNav';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
+import { TabStackProvider, useTabStack } from '@/lib/TabStackContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import Home from '@/pages/Home';
@@ -22,20 +23,18 @@ import SchoolClothes from '@/pages/SchoolClothes';
 import CommandCenter from '@/pages/CommandCenter';
 import SportsGear from '@/pages/SportsGear';
 
-// Tracks which "root" tab each path belongs to for slide direction
-function getTabIndex(pathname) {
-  if (pathname.startsWith("/command-center")) return 2;
-  if (pathname.startsWith("/my-info")) return 1;
-  if (pathname === "/" || pathname.startsWith("/hygiene") || pathname.startsWith("/clothes") || pathname.startsWith("/feminine-hygiene") || pathname.startsWith("/school-clothes") || pathname.startsWith("/sports-gear")) return 0;
-  return 0;
-}
-
 const AnimatedRoutes = ({ children }) => {
   const location = useLocation();
-  const prevTabIdx = useRef(getTabIndex(location.pathname));
-  const tabIdx = getTabIndex(location.pathname);
+  const { currentTabIndex, updateCurrentTabPath } = useTabStack();
+  const prevTabIdx = useRef(currentTabIndex);
+  const tabIdx = currentTabIndex;
   const isBack = prevTabIdx.current > tabIdx;
   prevTabIdx.current = tabIdx;
+  
+  // Track the current path for the active tab
+  useEffect(() => {
+    updateCurrentTabPath(location.pathname);
+  }, [location.pathname, updateCurrentTabPath]);
 
   return (
     <AnimatePresence mode="wait" initial={false}>
@@ -104,7 +103,9 @@ function App() {
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <Router>
-          <AuthenticatedApp />
+          <TabStackProvider>
+            <AuthenticatedApp />
+          </TabStackProvider>
         </Router>
         <Toaster />
       </QueryClientProvider>

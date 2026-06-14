@@ -1,41 +1,28 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Home, ClipboardList, Monitor } from "lucide-react";
+import { useTabStack } from "@/lib/TabStackContext";
 
 const tabs = [
-  { label: "Home", icon: Home, to: "/" },
-  { label: "My Info", icon: ClipboardList, to: "/my-info" },
-  { label: "Command", icon: Monitor, to: "/command-center" },
+  { key: "home", label: "Home", icon: Home, to: "/" },
+  { key: "profile", label: "My Info", icon: ClipboardList, to: "/my-info" },
+  { key: "command", label: "Command", icon: Monitor, to: "/command-center" },
 ];
 
-// Map each tab root to whether the current pathname belongs to it
-function isTabActive(pathname, tabTo) {
-  if (tabTo === "/") {
-    return pathname === "/" || pathname.startsWith("/hygiene") || pathname.startsWith("/clothes") || pathname.startsWith("/feminine-hygiene") || pathname.startsWith("/school-clothes") || pathname.startsWith("/sports-gear");
-  }
-  return pathname.startsWith(tabTo);
-}
-
-// Get the root path for a tab
-function getTabRoot(tabTo) {
-  return tabTo;
-}
-
 export default function BottomNav() {
-  const { pathname } = useLocation();
   const navigate = useNavigate();
-  
-  // Tab stack preservation: when switching tabs, replace the current entry
-  // When tapping the same tab twice, reset to that tab's root
-  const handleTabChange = (to) => {
-    const isActive = isTabActive(pathname, to);
-    if (isActive) {
-      // Already on this tab - if not at root, go to root; if at root, do nothing
-      if (pathname !== to) {
-        navigate(to, { replace: true });
-      }
+  const { switchToTab, resetTab, currentTabIndex } = useTabStack();
+
+  const handleTabChange = (tab) => {
+    const targetIndex = tabs.findIndex(t => t.key === tab.key);
+    
+    if (currentTabIndex === targetIndex) {
+      // Already on this tab - reset to root
+      const rootPath = resetTab(tab.key);
+      navigate(rootPath, { replace: true });
     } else {
-      // Switching to a different tab - replace to avoid building up history
-      navigate(to, { replace: true });
+      // Switching to different tab - use preserved stack
+      const path = switchToTab(tab.key);
+      navigate(path, { replace: true });
     }
   };
 
@@ -44,12 +31,12 @@ export default function BottomNav() {
       className="fixed bottom-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-xl border-t border-yellow-400/30 flex select-none"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
-      {tabs.map(({ label, icon: Icon, to }) => {
-        const active = isTabActive(pathname, to);
+      {tabs.map(({ key, label, icon: Icon, to }, index) => {
+        const active = currentTabIndex === index;
         return (
           <button
-            key={to}
-            onClick={() => handleTabChange(to)}
+            key={key}
+            onClick={() => handleTabChange({ key, to })}
             aria-label={label}
             aria-current={active ? "page" : undefined}
             className={`flex-1 flex flex-col items-center justify-center py-2 gap-0.5 transition-colors ${

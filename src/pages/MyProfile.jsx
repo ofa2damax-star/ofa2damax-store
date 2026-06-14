@@ -1,348 +1,341 @@
-import { useState, useEffect, useCallback } from "react";
-import PullToRefresh from "@/components/PullToRefresh";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { base44 } from "@/api/base44Client";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import MobileSelect from "@/components/MobileSelect";
-import { ArrowLeft, Save, CheckCircle2, User, MapPin, School, MessageSquare, Trash2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { User, Mail, Phone, MapPin, School, Home as HomeIcon, Shirt, Ruler, Save, LogOut, Trash2, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { base44 } from "@/api/base44Client";
-import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel,
-  AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
-  AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import PullToRefresh from "@/components/PullToRefresh";
+import MobileSelect from "@/components/MobileSelect";
+import AuthLayout from "@/components/AuthLayout";
+import { toast } from "sonner";
 
-const GRADES = ["Kindergarten", "1st Grade", "2nd Grade", "3rd Grade", "4th Grade", "5th Grade", "6th Grade", "7th Grade", "8th Grade", "9th Grade", "10th Grade", "11th Grade", "12th Grade"].map(g => ({ value: g, label: g }));
-const CLOTHES_SIZES = ["2T", "3T", "4T", "XS (4-5)", "S (6-7)", "M (8-10)", "L (10-12)", "XL (14-16)", "XXL (18-20)", "Adult XS", "Adult S", "Adult M", "Adult L", "Adult XL", "Adult XXL"].map(s => ({ value: s, label: s }));
-const SHOE_SIZES = ["4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12", "13", "1Y", "1.5Y", "2Y", "2.5Y", "3Y", "3.5Y", "4Y", "4.5Y", "5Y", "5.5Y", "6Y", "6.5Y", "7Y"].map(s => ({ value: s, label: s }));
+const gradeOptions = ["9th Grade", "10th Grade", "11th Grade", "12th Grade"];
+const clothesSizes = ["XS", "S", "M", "L", "XL", "XXL"];
+const shoeSizes = ["5", "6", "7", "8", "9", "10", "11", "12", "13"];
 
 export default function MyProfile() {
-  const [saved, setSaved] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [deleteOpen, setDeleteOpen] = useState(false);
-
-  const loadProfile = useCallback(async () => {
-    const me = await base44.auth.me();
-    if (me?.profile) {
-      setForm(prev => ({ ...prev, ...me.profile }));
-    }
-    if (me?.full_name) {
-      setForm(prev => ({ ...prev, full_name: me.full_name }));
-    }
-  }, []);
-
-  useEffect(() => { loadProfile(); }, [loadProfile]);
-
-  const [form, setForm] = useState({
+  const [formData, setFormData] = useState({
     full_name: "",
-    age: "",
+    email: "",
+    phone: "",
     grade: "",
     clothes_size: "",
     shoe_size: "",
-    school_name: "",
-    school_address: "",
     home_address: "",
-    city: "",
-    state: "",
-    zip: "",
     special_requests: "",
   });
+  const [isEditing, setIsEditing] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  const handleChange = (field, value) => {
-    setForm(prev => ({ ...prev, [field]: value }));
+  const queryClient = useQueryClient();
+
+  const { data: user, isLoading, error } = useQuery({
+    queryKey: ['user-profile'],
+    queryFn: async () => {
+      try {
+        return await base44.auth.me();
+      } catch (e) {
+        return null;
+      }
+    },
+    refetchOnWindowFocus: false,
+  });
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        full_name: user.full_name || "",
+        email: user.email || "",
+        phone: user.phone || "",
+        grade: user.grade || "",
+        clothes_size: user.clothes_size || "",
+        shoe_size: user.shoe_size || "",
+        home_address: user.home_address || "",
+        special_requests: user.special_requests || "",
+      });
+    }
+  }, [user]);
+
+  const updateProfileMutation = useMutation({
+    mutationFn: async (data) => {
+      await base44.auth.updateMe(data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user-profile'] });
+      setIsEditing(false);
+      toast.success("Profile updated successfully! ✨");
+    },
+    onError: (error) => {
+      toast.error("Failed to update profile");
+    },
+  });
+
+  const handleSave = () => {
+    updateProfileMutation.mutate(formData);
   };
 
-  const handleSave = async () => {
-    setLoading(true);
-    // Optimistic: show saved immediately
-    setSaved(true);
-    await base44.auth.updateMe({ profile: form });
-    setLoading(false);
-    setTimeout(() => setSaved(false), 3000);
+  const handleLogout = () => {
+    base44.auth.logout();
   };
+
+  const handleDeleteAccount = async () => {
+    try {
+      // Permanently delete the user account and all associated data
+      await base44.auth.deleteMe();
+      toast.success("Account deleted successfully");
+      // Redirect to login after deletion
+      window.location.href = "/login";
+    } catch (error) {
+      toast.error("Failed to delete account");
+    }
+  };
+
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
-    <PullToRefresh onRefresh={loadProfile} className="min-h-screen">
-    <div className="min-h-screen bg-background pb-12">
-      {/* Header */}
-      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-xl border-b border-border/50 px-4 py-3" style={{ paddingTop: "calc(0.75rem + env(safe-area-inset-top))" }}>
-        <div className="max-w-2xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link to="/">
-              <Button variant="ghost" size="icon" className="rounded-full" aria-label="Go back to home">
-                <ArrowLeft className="w-5 h-5" aria-hidden="true" />
-              </Button>
-            </Link>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">📋</span>
-              <h1 className="text-lg font-extrabold">My Info</h1>
-            </div>
-          </div>
-          <Button
-            onClick={handleSave}
-            disabled={loading}
-            className="rounded-full gap-2 font-bold"
-            size="sm"
-            aria-label={saved ? "Profile saved" : "Save profile"}
-          >
-            {saved ? <CheckCircle2 className="w-4 h-4" aria-hidden="true" /> : <Save className="w-4 h-4" aria-hidden="true" />}
-            {saved ? "Saved!" : "Save"}
-          </Button>
-        </div>
-      </div>
-
-      <div className="px-4 pt-6 max-w-2xl mx-auto space-y-6">
-
-        {/* Personal Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.05 }}
-          className="bg-card rounded-3xl p-5 shadow-sm border border-border/50"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <div className="bg-purple-100 rounded-full p-2">
-              <User className="w-4 h-4 text-purple-600" />
-            </div>
-            <h2 className="font-extrabold text-base">About Me</h2>
-          </div>
+    <AuthLayout
+      title="My Profile"
+      subtitle="Your personal information"
+      icon={<User className="w-8 h-8 text-primary" />}
+    >
+      <PullToRefresh onRefresh={() => queryClient.invalidateQueries({ queryKey: ['user-profile'] })}>
+        <div className="space-y-6 pb-8">
+          {/* Personal Info Section */}
           <div className="space-y-4">
-            <div>
-              <Label htmlFor="full_name" className="font-bold text-sm mb-1 block">Full Name</Label>
-              <Input
-                id="full_name"
-                placeholder="Your name"
-                value={form.full_name}
-                onChange={e => handleChange("full_name", e.target.value)}
-                className="rounded-xl"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <Label htmlFor="age" className="font-bold text-sm mb-1 block">Age</Label>
+            <h3 className="text-lg font-bold text-primary mb-3">Personal Information</h3>
+            
+            <div className="space-y-2">
+              <Label htmlFor="full_name" className="text-sm font-semibold">Full Name</Label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
                 <Input
-                  id="age"
-                  type="number"
-                  placeholder="e.g. 10"
-                  value={form.age}
-                  onChange={e => handleChange("age", e.target.value)}
-                  className="rounded-xl"
-                />
-              </div>
-              <div>
-                <Label className="font-bold text-sm mb-1 block">Grade</Label>
-                <MobileSelect
-                  options={[{ value: "", label: "Select grade" }, ...GRADES]}
-                  value={form.grade}
-                  onChange={val => handleChange("grade", val)}
-                  className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm"
-                  placeholder="Select grade"
+                  id="full_name"
+                  value={formData.full_name}
+                  onChange={(e) => handleInputChange('full_name', e.target.value)}
+                  disabled={!isEditing}
+                  className="pl-10"
+                  aria-label="Full name"
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <Label className="font-bold text-sm mb-1 block">Clothes Size</Label>
-                <MobileSelect
-                  options={[{ value: "", label: "Select size" }, ...CLOTHES_SIZES]}
-                  value={form.clothes_size}
-                  onChange={val => handleChange("clothes_size", val)}
-                  placeholder="Select size"
-                />
-              </div>
-              <div>
-                <Label className="font-bold text-sm mb-1 block">Shoe Size</Label>
-                <MobileSelect
-                  options={[{ value: "", label: "Select size" }, ...SHOE_SIZES]}
-                  value={form.shoe_size}
-                  onChange={val => handleChange("shoe_size", val)}
-                  placeholder="Select size"
-                />
-              </div>
-            </div>
-          </div>
-        </motion.div>
 
-        {/* School Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-card rounded-3xl p-5 shadow-sm border border-border/50"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <div className="bg-sky-100 rounded-full p-2">
-              <School className="w-4 h-4 text-sky-600" />
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-sm font-semibold">Email</Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
+                <Input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  disabled={!isEditing}
+                  className="pl-10"
+                  aria-label="Email address"
+                />
+              </div>
             </div>
-            <h2 className="font-extrabold text-base">My School</h2>
+
+            <div className="space-y-2">
+              <Label htmlFor="phone" className="text-sm font-semibold">Phone Number</Label>
+              <div className="relative">
+                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
+                <Input
+                  id="phone"
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => handleInputChange('phone', e.target.value)}
+                  disabled={!isEditing}
+                  className="pl-10"
+                  placeholder="(555) 123-4567"
+                  aria-label="Phone number"
+                />
+              </div>
+            </div>
           </div>
+
+          {/* School Details Section */}
           <div className="space-y-4">
-            <div>
-              <Label htmlFor="school_name" className="font-bold text-sm mb-1 block">School Name</Label>
-              <Input
-                id="school_name"
-                placeholder="e.g. Sunnydale Elementary"
-                value={form.school_name}
-                onChange={e => handleChange("school_name", e.target.value)}
-                className="rounded-xl"
+            <h3 className="text-lg font-bold text-primary mb-3">School Details</h3>
+            
+            <div className="space-y-2">
+              <Label className="text-sm font-semibold">Grade Level</Label>
+              <MobileSelect
+                options={gradeOptions}
+                value={formData.grade}
+                onChange={(value) => handleInputChange('grade', value)}
+                placeholder="Select your grade"
+                disabled={!isEditing}
+                icon={<School className="w-4 h-4" />}
               />
             </div>
-            <div>
-              <Label htmlFor="school_address" className="font-bold text-sm mb-1 block">School Address</Label>
-              <Input
-                id="school_address"
-                placeholder="123 School Street"
-                value={form.school_address}
-                onChange={e => handleChange("school_address", e.target.value)}
-                className="rounded-xl"
-              />
-            </div>
-          </div>
-        </motion.div>
 
-        {/* Home Address */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-          className="bg-card rounded-3xl p-5 shadow-sm border border-border/50"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <div className="bg-green-100 rounded-full p-2">
-              <MapPin className="w-4 h-4 text-green-600" />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">Clothes Size</Label>
+                <MobileSelect
+                  options={clothesSizes}
+                  value={formData.clothes_size}
+                  onChange={(value) => handleInputChange('clothes_size', value)}
+                  placeholder="Size"
+                  disabled={!isEditing}
+                  icon={<Shirt className="w-4 h-4" />}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">Shoe Size</Label>
+                <MobileSelect
+                  options={shoeSizes}
+                  value={formData.shoe_size}
+                  onChange={(value) => handleInputChange('shoe_size', value)}
+                  placeholder="Size"
+                  disabled={!isEditing}
+                  icon={<Ruler className="w-4 h-4" />}
+                />
+              </div>
             </div>
-            <h2 className="font-extrabold text-base">My Home Address</h2>
           </div>
+
+          {/* Home Address Section */}
           <div className="space-y-4">
-            <div>
-              <Label htmlFor="home_address" className="font-bold text-sm mb-1 block">Street Address</Label>
-              <Input
-                id="home_address"
-                placeholder="456 Home Avenue"
-                value={form.home_address}
-                onChange={e => handleChange("home_address", e.target.value)}
-                className="rounded-xl"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <Label htmlFor="city" className="font-bold text-sm mb-1 block">City</Label>
-                <Input
-                  id="city"
-                  placeholder="City"
-                  value={form.city}
-                  onChange={e => handleChange("city", e.target.value)}
-                  className="rounded-xl"
-                />
-              </div>
-              <div>
-                <Label htmlFor="state" className="font-bold text-sm mb-1 block">State</Label>
-                <Input
-                  id="state"
-                  placeholder="State"
-                  value={form.state}
-                  onChange={e => handleChange("state", e.target.value)}
-                  className="rounded-xl"
+            <h3 className="text-lg font-bold text-primary mb-3">Home Address</h3>
+            
+            <div className="space-y-2">
+              <Label htmlFor="home_address" className="text-sm font-semibold">Address</Label>
+              <div className="relative">
+                <HomeIcon className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" aria-hidden="true" />
+                <Textarea
+                  id="home_address"
+                  value={formData.home_address}
+                  onChange={(e) => handleInputChange('home_address', e.target.value)}
+                  disabled={!isEditing}
+                  className="pl-10 min-h-[100px]"
+                  placeholder="Enter your full home address"
+                  aria-label="Home address"
                 />
               </div>
             </div>
-            <div>
-              <Label htmlFor="zip" className="font-bold text-sm mb-1 block">ZIP Code</Label>
-              <Input
-                id="zip"
-                placeholder="00000"
-                value={form.zip}
-                onChange={e => handleChange("zip", e.target.value)}
-                className="rounded-xl"
+          </div>
+
+          {/* Special Requests Section */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-bold text-primary mb-3">Special Requests</h3>
+            
+            <div className="space-y-2">
+              <Label htmlFor="special_requests" className="text-sm font-semibold">Additional Notes</Label>
+              <Textarea
+                id="special_requests"
+                value={formData.special_requests}
+                onChange={(e) => handleInputChange('special_requests', e.target.value)}
+                disabled={!isEditing}
+                className="min-h-[100px]"
+                placeholder="Any special requirements or notes..."
+                aria-label="Special requests or additional notes"
               />
+              <p className="text-xs text-muted-foreground">
+                Let us know about any allergies, preferences, or special needs
+              </p>
             </div>
           </div>
-        </motion.div>
 
-        {/* Special Requests */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-card rounded-3xl p-5 shadow-sm border border-border/50"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <div className="bg-yellow-100 rounded-full p-2">
-              <MessageSquare className="w-4 h-4 text-yellow-600" />
-            </div>
-            <h2 className="font-extrabold text-base">Special Requests</h2>
-          </div>
-          <Textarea
-            id="special_requests"
-            placeholder="Any special needs, allergies, preferences, sizes, or anything else we should know... ✏️"
-            value={form.special_requests}
-            onChange={e => handleChange("special_requests", e.target.value)}
-            className="rounded-xl min-h-[120px] resize-none"
-          />
-        </motion.div>
-
-        {/* Save Button */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.25 }}
-          className="space-y-3"
-        >
-          <Button
-            onClick={handleSave}
-            disabled={loading}
-            className="w-full rounded-2xl h-12 text-base font-extrabold gap-2 select-none"
-          >
-            {saved ? (
+          {/* Action Buttons */}
+          <div className="flex flex-col gap-3 pt-4">
+            {isEditing ? (
               <>
-                <CheckCircle2 className="w-5 h-5" /> All Saved! 🎉
+                <Button
+                  onClick={handleSave}
+                  disabled={updateProfileMutation.isPending}
+                  className="w-full h-12 text-base font-bold gap-2"
+                >
+                  <Save className="w-5 h-5" />
+                  {updateProfileMutation.isPending ? "Saving..." : "Save Changes"}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsEditing(false)}
+                  className="w-full h-12 text-base font-bold"
+                >
+                  Cancel
+                </Button>
               </>
             ) : (
               <>
-                <Save className="w-5 h-5" /> Save My Info
+                <Button
+                  onClick={() => setIsEditing(true)}
+                  className="w-full h-12 text-base font-bold"
+                >
+                  Edit Profile
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={handleLogout}
+                  className="w-full h-12 text-base font-bold gap-2"
+                >
+                  <LogOut className="w-5 h-5" />
+                  Logout
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={() => setShowDeleteConfirm(true)}
+                  className="w-full h-12 text-base font-bold gap-2 bg-red-700 hover:bg-red-800"
+                >
+                  <Trash2 className="w-5 h-5" />
+                  Delete Account
+                </Button>
               </>
             )}
-          </Button>
+          </div>
 
-          {/* Delete Account */}
-          <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive" className="w-full rounded-2xl h-12 text-base font-extrabold gap-2 select-none" aria-label="Delete your account permanently">
-                <Trash2 className="w-5 h-5" aria-hidden="true" /> Delete Account
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Delete your account?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This will permanently delete your account and all your data including your profile, selections, and submissions. This action cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                  onClick={async () => {
-                    try {
-                      await base44.auth.deleteMe();
-                      base44.auth.logout();
-                    } catch (error) {
-                      console.error('Failed to delete account:', error);
-                    }
-                  }}
-                >
-                  Yes, Delete My Account
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </motion.div>
-
-      </div>
-    </div>
-    </PullToRefresh>
+          {/* Delete Confirmation Dialog */}
+          {showDeleteConfirm && (
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="bg-card rounded-2xl p-6 max-w-sm w-full shadow-2xl"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <AlertTriangle className="w-6 h-6 text-destructive" aria-hidden="true" />
+                  <h3 className="text-xl font-bold">Delete Account?</h3>
+                </div>
+                <p className="text-muted-foreground mb-6">
+                  This will permanently delete your account and all associated data. This action cannot be undone.
+                </p>
+                <div className="flex gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowDeleteConfirm(false)}
+                    className="flex-1"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={handleDeleteAccount}
+                    className="flex-1 bg-red-700 hover:bg-red-800"
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </div>
+      </PullToRefresh>
+    </AuthLayout>
   );
 }
