@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { hygieneProducts, clothesProducts } from "@/lib/productData";
 
 const feminineProducts = [
@@ -77,17 +78,41 @@ function CategoryItemCounts({ section, submissions }) {
 }
 
 export default function ItemCountsDashboard({ submissions }) {
+  const [activeFilter, setActiveFilter] = useState("all");
   const totalItems = submissions.reduce((acc, s) => acc + (s.items?.length || 0), 0);
+
+  const visibleSections = activeFilter === "all"
+    ? SECTIONS
+    : SECTIONS.filter(s => s.key === activeFilter);
 
   return (
     <div>
+      {/* Filter buttons */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        <button
+          onClick={() => setActiveFilter("all")}
+          className={`px-4 py-1.5 rounded-xl text-sm font-bold transition-colors ${activeFilter === "all" ? "bg-slate-800 text-white shadow" : "bg-white text-slate-500 border border-slate-200 hover:bg-slate-50"}`}
+        >
+          All Categories
+        </button>
+        {SECTIONS.map(s => (
+          <button
+            key={s.key}
+            onClick={() => setActiveFilter(s.key)}
+            className={`px-4 py-1.5 rounded-xl text-sm font-bold transition-colors ${activeFilter === s.key ? "bg-slate-800 text-white shadow" : "bg-white text-slate-500 border border-slate-200 hover:bg-slate-50"}`}
+          >
+            {s.emoji} {s.label}
+          </button>
+        ))}
+      </div>
+
       <div className="flex items-center justify-between mb-4">
         <p className="text-xs text-slate-400 font-bold uppercase tracking-wide">
           Total items requested across all orders: <span className="text-slate-700">{totalItems}</span>
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {SECTIONS.map(section => (
+        {visibleSections.map(section => (
           <CategoryItemCounts key={section.key} section={section} submissions={submissions} />
         ))}
       </div>
