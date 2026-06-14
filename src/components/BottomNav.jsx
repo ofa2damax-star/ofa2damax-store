@@ -27,9 +27,11 @@ export default function BottomNav() {
   };
 
   return (
-    <div
+    <nav
       className="fixed bottom-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-xl border-t border-border flex select-none"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      role="navigation"
+      aria-label="Main navigation"
     >
       {tabs.map(({ key, label, icon: Icon, to }, index) => {
         const active = currentTabIndex === index;
@@ -39,7 +41,7 @@ export default function BottomNav() {
             onClick={() => handleTabChange({ key, to })}
             aria-label={label}
             aria-current={active ? "page" : undefined}
-            className={`flex-1 flex flex-col items-center justify-center py-2 gap-0.5 transition-colors ${
+            className={`flex-1 flex flex-col items-center justify-center py-2 gap-0.5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
               active ? "text-accent" : "text-muted-foreground"
             }`}
           >
@@ -50,6 +52,6 @@ export default function BottomNav() {
           </button>
         );
       })}
-    </div>
+    </nav>
   );
 }

@@ -35,17 +35,23 @@ export default function HygieneProducts() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           className="text-center text-muted-foreground font-semibold mb-6 text-sm"
+          role="status"
         >
           Tap the items you need! 🫧
         </motion.p>
 
-        <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
+        <div 
+          className="grid grid-cols-3 md:grid-cols-4 gap-3"
+          role="grid"
+          aria-label="Product selection grid"
+        >
           {hygieneProducts.map((product, i) => (
             <motion.div
               key={product.id}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.05, type: "spring" }}
+              role="gridcell"
             >
               <ProductCard
                 product={product}

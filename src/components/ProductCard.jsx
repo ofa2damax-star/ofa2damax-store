@@ -7,9 +7,15 @@ export default function ProductCard({ product, isSelected, onToggle }) {
       whileTap={{ scale: 0.92 }}
       whileHover={{ scale: 1.05 }}
       onClick={() => onToggle(product.id)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onToggle(product.id);
+        }
+      }}
       aria-label={`${product.name} - ${isSelected ? 'selected' : 'not selected'}`}
       aria-pressed={isSelected}
-      className={`relative flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border-3 transition-all duration-200 shadow-sm
+      className={`relative flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border-3 transition-all duration-200 shadow-sm focus:outline-none focus:ring-4 focus:ring-primary/50 focus:ring-offset-2
         ${product.color} 
         ${isSelected 
           ? `${product.borderColor} border-[3px] ring-4 ring-primary/20 shadow-lg` 

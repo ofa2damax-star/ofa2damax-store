@@ -11,16 +11,22 @@ export default function CategoryHeader({ title, emoji, selectedCount, onViewPick
       animate={{ opacity: 1, y: 0 }}
       className="sticky top-0 z-10 bg-background/80 backdrop-blur-xl border-b border-border/50 px-4 py-3"
       style={{ paddingTop: "calc(0.75rem + env(safe-area-inset-top))" }}
+      role="banner"
     >
       <div className="max-w-2xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link to="/">
-            <Button variant="ghost" size="icon" className="rounded-full" aria-label="Go back to home">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="rounded-full" 
+              aria-label="Go back to home"
+            >
               <ArrowLeft className="w-5 h-5" aria-hidden="true" />
             </Button>
           </Link>
           <div className="flex items-center gap-2">
-            <span className="text-2xl">{emoji}</span>
+            <span className="text-2xl" aria-hidden="true">{emoji}</span>
             <div>
               <h1 className="text-lg font-extrabold leading-tight">{title}</h1>
               <p className="text-xs font-black text-accent uppercase tracking-widest leading-tight">Go Cougars! · Kearns</p>
@@ -33,6 +39,7 @@ export default function CategoryHeader({ title, emoji, selectedCount, onViewPick
           className="rounded-full gap-2 font-bold"
           onClick={onViewPicks}
           aria-label={`View my picks: ${selectedCount} items selected`}
+          aria-expanded={false}
         >
           <ShoppingBag className="w-4 h-4" aria-hidden="true" />
           My Picks
