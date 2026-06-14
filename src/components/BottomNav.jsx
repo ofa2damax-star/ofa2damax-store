@@ -19,11 +19,14 @@ export default function BottomNav() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   
-  // Preserve scroll position when switching tabs
+  // Preserve history stack when switching tabs - only reset if already on this tab's root
   const handleTabChange = (to) => {
-    if (pathname === to) {
+    const isActive = isTabActive(pathname, to);
+    if (isActive && pathname === to) {
+      // Already on this tab's root - reset the stack
       navigate(to, { replace: true });
     } else {
+      // Switching tabs or navigating within tab - preserve history
       navigate(to);
     }
   };
