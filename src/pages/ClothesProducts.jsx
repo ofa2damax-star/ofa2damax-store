@@ -4,6 +4,7 @@ import { clothesProducts } from "@/lib/productData";
 import ProductCard from "@/components/ProductCard";
 import CategoryHeader from "@/components/CategoryHeader";
 import SelectionDrawer from "@/components/SelectionDrawer";
+import PullToRefresh from "@/components/PullToRefresh";
 
 export default function ClothesProducts() {
   const [selected, setSelected] = useState([]);
@@ -20,6 +21,7 @@ export default function ClothesProducts() {
   };
 
   return (
+    <PullToRefresh onRefresh={() => Promise.resolve()}>
     <div className="min-h-screen bg-background pb-8">
       <CategoryHeader
         title="Clothes"
@@ -65,5 +67,6 @@ export default function ClothesProducts() {
         categoryName="Clothes"
       />
     </div>
+    </PullToRefresh>
   );
 }

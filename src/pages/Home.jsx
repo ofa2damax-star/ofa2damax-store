@@ -4,9 +4,11 @@ import HomeCategoryCard from "@/components/HomeCategoryCard";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import PanicButton from "@/components/PanicButton";
+import PullToRefresh from "@/components/PullToRefresh";
 
 export default function Home() {
   return (
+    <PullToRefresh onRefresh={() => Promise.resolve()} className="min-h-screen">
     <div className="min-h-screen bg-background relative">
       {/* Black background base with cougar paw pattern */}
       <div className="fixed inset-0 bg-black z-0" />
@@ -204,5 +206,6 @@ export default function Home() {
         </Link>
       </div>
     </div>
+    </PullToRefresh>
   );
 }

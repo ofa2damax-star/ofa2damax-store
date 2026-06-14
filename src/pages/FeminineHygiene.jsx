@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import ProductCard from "@/components/ProductCard";
 import CategoryHeader from "@/components/CategoryHeader";
 import SelectionDrawer from "@/components/SelectionDrawer";
+import PullToRefresh from "@/components/PullToRefresh";
 
 const feminineProducts = [
   { id: "pads_regular", name: "Pads – Regular", emoji: "🌸", color: "bg-pink-500", borderColor: "border-purple-400" },
@@ -34,6 +35,7 @@ export default function FeminineHygiene() {
   };
 
   return (
+    <PullToRefresh onRefresh={() => Promise.resolve()}>
     <div className="min-h-screen bg-background pb-8">
       <CategoryHeader
         title="Feminine Hygiene"
@@ -79,5 +81,6 @@ export default function FeminineHygiene() {
         categoryName="Feminine Hygiene"
       />
     </div>
+    </PullToRefresh>
   );
 }

@@ -4,6 +4,7 @@ import { sportsProducts } from "@/lib/productData";
 import ProductCard from "@/components/ProductCard";
 import CategoryHeader from "@/components/CategoryHeader";
 import SelectionDrawer from "@/components/SelectionDrawer";
+import PullToRefresh from "@/components/PullToRefresh";
 
 export default function SportsGear() {
   const [selected, setSelected] = useState([]);
@@ -20,6 +21,7 @@ export default function SportsGear() {
   };
 
   return (
+    <PullToRefresh onRefresh={() => Promise.resolve()}>
     <div className="min-h-screen bg-background pb-8">
       <CategoryHeader
         title="Sports & Equipment"
@@ -65,5 +67,6 @@ export default function SportsGear() {
         categoryName="Sports & Equipment"
       />
     </div>
+    </PullToRefresh>
   );
 }

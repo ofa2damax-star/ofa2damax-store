@@ -9,7 +9,9 @@ const tabs = [
 
 // Map each tab root to whether the current pathname belongs to it
 function isTabActive(pathname, tabTo) {
-  if (tabTo === "/") return pathname === "/" || (!pathname.startsWith("/my-info") && !pathname.startsWith("/command-center") && pathname !== "/login" && pathname !== "/register" && pathname !== "/forgot-password" && pathname !== "/reset-password");
+  if (tabTo === "/") {
+    return pathname === "/" || pathname.startsWith("/hygiene") || pathname.startsWith("/clothes") || pathname.startsWith("/feminine-hygiene") || pathname.startsWith("/school-clothes") || pathname.startsWith("/sports-gear");
+  }
   return pathname.startsWith(tabTo);
 }
 
@@ -28,10 +30,11 @@ export default function BottomNav() {
           <button
             key={to}
             onClick={() => {
-              if (active) {
-                // Reset tab to root
+              if (active && pathname === to) {
+                // Only reset if already on the root of this tab
                 navigate(to, { replace: true });
               } else {
+                // Switch tabs or navigate within tab - preserves history
                 navigate(to);
               }
             }}

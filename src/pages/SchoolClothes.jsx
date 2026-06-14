@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Check, X } from "lucide-react";
 import SelectionDrawer from "@/components/SelectionDrawer";
+import PullToRefresh from "@/components/PullToRefresh";
 
 const SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
 
@@ -49,6 +50,7 @@ export default function SchoolClothes() {
   };
 
   return (
+    <PullToRefresh onRefresh={() => Promise.resolve()}>
     <div className="min-h-screen bg-background pb-8">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-xl border-b border-border/50 px-4 py-3">
@@ -173,5 +175,6 @@ export default function SchoolClothes() {
         categoryName="School Clothes"
       />
     </div>
+    </PullToRefresh>
   );
 }
