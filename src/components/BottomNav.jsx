@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Home, ClipboardList, Monitor } from "lucide-react";
 
 const tabs = [
@@ -7,8 +7,15 @@ const tabs = [
   { label: "Command", icon: Monitor, to: "/command-center" },
 ];
 
+// Map each tab root to whether the current pathname belongs to it
+function isTabActive(pathname, tabTo) {
+  if (tabTo === "/") return pathname === "/" || (!pathname.startsWith("/my-info") && !pathname.startsWith("/command-center") && pathname !== "/login" && pathname !== "/register" && pathname !== "/forgot-password" && pathname !== "/reset-password");
+  return pathname.startsWith(tabTo);
+}
+
 export default function BottomNav() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   return (
     <div
@@ -16,11 +23,18 @@ export default function BottomNav() {
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       {tabs.map(({ label, icon: Icon, to }) => {
-        const active = pathname === to;
+        const active = isTabActive(pathname, to);
         return (
-          <Link
+          <button
             key={to}
-            to={to}
+            onClick={() => {
+              if (active) {
+                // Reset tab to root
+                navigate(to, { replace: true });
+              } else {
+                navigate(to);
+              }
+            }}
             className={`flex-1 flex flex-col items-center justify-center py-2 gap-0.5 transition-colors ${
               active ? "text-yellow-400" : "text-gray-500"
             }`}
@@ -29,7 +43,7 @@ export default function BottomNav() {
             <span className={`text-[10px] font-black uppercase tracking-wide ${active ? "text-yellow-400" : "text-gray-500"}`}>
               {label}
             </span>
-          </Link>
+          </button>
         );
       })}
     </div>

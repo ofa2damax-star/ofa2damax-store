@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import PullToRefresh from "@/components/PullToRefresh";
 import { motion } from "framer-motion";
 import MobileSelect from "@/components/MobileSelect";
 import { ArrowLeft, Save, CheckCircle2, User, MapPin, School, MessageSquare, Trash2 } from "lucide-react";
@@ -22,6 +23,18 @@ export default function MyProfile() {
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const loadProfile = useCallback(async () => {
+    const me = await base44.auth.me();
+    if (me?.profile) {
+      setForm(prev => ({ ...prev, ...me.profile }));
+    }
+    if (me?.full_name) {
+      setForm(prev => ({ ...prev, full_name: me.full_name }));
+    }
+  }, []);
+
+  useEffect(() => { loadProfile(); }, [loadProfile]);
 
   const [form, setForm] = useState({
     full_name: "",
@@ -52,6 +65,7 @@ export default function MyProfile() {
   };
 
   return (
+    <PullToRefresh onRefresh={loadProfile} className="min-h-screen">
     <div className="min-h-screen bg-background pb-12">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-xl border-b border-border/50 px-4 py-3" style={{ paddingTop: "calc(0.75rem + env(safe-area-inset-top))" }}>
@@ -321,5 +335,6 @@ export default function MyProfile() {
 
       </div>
     </div>
+    </PullToRefresh>
   );
 }

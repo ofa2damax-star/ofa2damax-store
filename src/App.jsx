@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import BottomNav from '@/components/BottomNav';
 import PageNotFound from './lib/PageNotFound';
@@ -21,16 +21,26 @@ import SchoolClothes from '@/pages/SchoolClothes';
 import CommandCenter from '@/pages/CommandCenter';
 import SportsGear from '@/pages/SportsGear';
 
+// Tracks which "root" tab each path belongs to for slide direction
+const TAB_ROOTS = ["/", "/my-info", "/command-center"];
+
+function getTabIndex(pathname) {
+  if (pathname.startsWith("/command-center")) return 2;
+  if (pathname.startsWith("/my-info")) return 1;
+  return 0;
+}
+
 const AnimatedRoutes = ({ children }) => {
   const location = useLocation();
+  const tabIdx = getTabIndex(location.pathname);
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={location.pathname}
-        initial={{ x: 30, opacity: 0 }}
+        initial={{ x: 20, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
-        exit={{ x: -30, opacity: 0 }}
-        transition={{ duration: 0.2, ease: "easeInOut" }}
+        exit={{ x: -20, opacity: 0 }}
+        transition={{ duration: 0.18, ease: "easeInOut" }}
         style={{ position: "relative", width: "100%" }}
       >
         {children}
