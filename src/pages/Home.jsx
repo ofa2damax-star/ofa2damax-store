@@ -12,16 +12,16 @@ export default function Home() {
       <div className="fixed inset-0 bg-black z-0" />
 
       {/* Hero */}
-      <div className="relative overflow-hidden px-4 pt-10 pb-6 md:pt-14 md:pb-8 z-10">
-        {/* N&N logo behind the hero text */}
+      <div className="relative overflow-hidden px-4 pt-10 pb-6 md:pt-14 md:pb-8 z-10 bg-green-800">
+        {/* N&N logo filling the hero background */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             backgroundImage: `url(https://media.base44.com/images/public/6a1b94aa3da2d1391351474e/c3fa25a5d_Image1.jpg)`,
-            backgroundSize: "contain",
+            backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
-            opacity: 0.18,
+            opacity: 0.25,
           }}
         />
         <motion.div
@@ -33,7 +33,8 @@ export default function Home() {
           <motion.div
             animate={{ rotate: [0, 10, -10, 0] }}
             transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-            className="text-6xl md:text-7xl mb-3 inline-block"
+            className="text-6xl md:text-7xl mb-3 inline-block drop-shadow-lg"
+          style={{ filter: "sepia(1) saturate(5) hue-rotate(10deg) brightness(1.4)" }}
           >
             🐾
           </motion.div>
