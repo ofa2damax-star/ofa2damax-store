@@ -76,13 +76,25 @@ export default function CommandCenter() {
     queryClient.invalidateQueries({ queryKey: ["selections"] });
   };
 
-  const handlePrint = () => {
+  const handlePrint = async () => {
     const printable = submissions.filter(s => (s.status || "pending") !== "picked_up");
+
+    // Fetch all users to get their address profiles
+    let users = [];
+    try {
+      users = await base44.entities.User.list();
+    } catch (e) {}
+
+    const getUserProfile = (created_by_id) => {
+      const u = users.find(u => u.id === created_by_id);
+      return u?.profile || {};
+    };
+
     const grouped = {};
     printable.forEach(s => {
       const name = s.child_name || "Unknown Student";
-      if (!grouped[name]) grouped[name] = [];
-      grouped[name].push(s);
+      if (!grouped[name]) grouped[name] = { orders: [], profile: getUserProfile(s.created_by_id) };
+      grouped[name].orders.push(s);
     });
 
     const html = `
@@ -93,8 +105,11 @@ export default function CommandCenter() {
           body { font-family: Arial, sans-serif; padding: 20px; color: #111; }
           h1 { font-size: 22px; margin-bottom: 4px; }
           .subtitle { font-size: 12px; color: #666; margin-bottom: 24px; }
-          .student { page-break-inside: avoid; margin-bottom: 28px; border: 1px solid #ddd; border-radius: 8px; padding: 14px; }
-          .student-name { font-size: 18px; font-weight: bold; margin-bottom: 6px; }
+          .student { page-break-inside: avoid; margin-bottom: 28px; border: 2px solid #222; border-radius: 8px; padding: 14px; }
+          .student-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 8px; }
+          .student-name { font-size: 18px; font-weight: bold; }
+          .student-address { font-size: 12px; color: #333; text-align: right; line-height: 1.5; }
+          .address-label { font-size: 10px; font-weight: bold; text-transform: uppercase; color: #888; margin-bottom: 2px; }
           .order { margin-bottom: 10px; }
           .category { font-size: 11px; font-weight: bold; text-transform: uppercase; color: #555; margin-bottom: 4px; }
           ul { margin: 0; padding-left: 20px; }
@@ -108,9 +123,22 @@ export default function CommandCenter() {
       <body>
         <h1>📦 OFA2DAMAX Packing List</h1>
         <div class="subtitle">Generated ${new Date().toLocaleDateString()} — ${printable.length} orders (excluding picked up)</div>
-        ${Object.entries(grouped).map(([name, orders]) => `
+        ${Object.entries(grouped).map(([name, { orders, profile }]) => {
+          const street = profile.home_address || "";
+          const city = profile.city || "";
+          const state = profile.state || "";
+          const zip = profile.zip || "";
+          const hasAddress = street || city;
+          const addressLine = [street, [city, state].filter(Boolean).join(", "), zip].filter(Boolean).join("\n");
+          return `
           <div class="student">
-            <div class="student-name">👤 ${name}</div>
+            <div class="student-header">
+              <div class="student-name">👤 ${name}</div>
+              <div class="student-address">
+                <div class="address-label">📦 Delivery Address</div>
+                ${hasAddress ? addressLine.split("\n").map(l => `<div>${l}</div>`).join("") : '<div style="color:#aaa;font-style:italic;">No address on file</div>'}
+              </div>
+            </div>
             ${orders.map(o => `
               <div class="order">
                 <div class="category">${o.category?.replace(/_/g, " ")} · Status: ${o.status || "pending"}</div>
@@ -122,7 +150,7 @@ export default function CommandCenter() {
               </div>
             `).join("")}
           </div>
-        `).join("")}
+        `}).join("")}
       </body>
       </html>
     `;
