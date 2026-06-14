@@ -22,6 +22,11 @@ const schoolItems = [
   { id: "school_bag", name: "School Bag", emoji: "🎒", color: "bg-yellow-400", borderColor: "border-green-700" },
   { id: "school_socks", name: "School Socks", emoji: "🧦", color: "bg-green-700", borderColor: "border-yellow-400" },
   { id: "school_shoes", name: "School Shoes", emoji: "👟", color: "bg-green-800", borderColor: "border-yellow-400" },
+  { id: "pencils", name: "Pencils", emoji: "✏️", color: "bg-yellow-400", borderColor: "border-green-700" },
+  { id: "paper", name: "Paper", emoji: "📄", color: "bg-green-700", borderColor: "border-yellow-400" },
+  { id: "pens", name: "Pens", emoji: "🖊️", color: "bg-green-800", borderColor: "border-yellow-400" },
+  { id: "folders", name: "Folders", emoji: "📁", color: "bg-yellow-400", borderColor: "border-green-700" },
+  { id: "binders", name: "Binders", emoji: "📒", color: "bg-green-700", borderColor: "border-yellow-400" },
 ];
 
 export default function SchoolClothes() {
