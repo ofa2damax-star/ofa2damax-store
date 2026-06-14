@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Search, RefreshCw, Printer } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 import { hygieneProducts, clothesProducts, sportsProducts } from "@/lib/productData";
 
 const ALL_PRODUCTS = [
@@ -52,6 +53,7 @@ const STATUS_FILTERS = [
 
 export default function CommandCenter() {
   const queryClient = useQueryClient();
+  const { toast } = useToast();
   const [tab, setTab] = useState("orders");
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
@@ -62,13 +64,61 @@ export default function CommandCenter() {
     queryFn: () => base44.entities.Selection.list("-created_date", 200),
   });
 
+  const { data: users = [] } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => base44.entities.User.list(),
+  });
+
   const updateMutation = useMutation({
     mutationFn: ({ id, data }) => base44.entities.Selection.update(id, data),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["selections"] }),
   });
 
-  const handleUpdateStatus = (id, status) => {
+  const handleUpdateStatus = async (id, status) => {
     updateMutation.mutate({ id, data: { status } });
+
+    if (status === "picked_up") {
+      const submission = submissions.find(s => s.id === id);
+      if (submission) {
+        const owner = users.find(u => u.id === submission.created_by_id);
+        const recipientEmail = owner?.email;
+
+        // Resolve item names
+        const ALL_PRODUCTS = [
+          ...hygieneProducts, ...clothesProducts, ...sportsProducts,
+          { id: "pads", name: "Pads", emoji: "🩸" },
+          { id: "tampons", name: "Tampons", emoji: "🌸" },
+          { id: "panty_liners", name: "Panty Liners", emoji: "💜" },
+          { id: "pain_relief", name: "Pain Relief", emoji: "💊" },
+          { id: "heating_pad", name: "Heating Pad", emoji: "🔥" },
+          { id: "wipes", name: "Wipes", emoji: "🧻" },
+          { id: "underwear_fem", name: "Period Underwear", emoji: "🩲" },
+          { id: "chocolate", name: "Chocolate", emoji: "🍫" },
+          { id: "tshirt_school", name: "T-Shirt (School)", emoji: "👕" },
+          { id: "hoodie_school", name: "Hoodie (School)", emoji: "🧥" },
+          { id: "pants_school", name: "Pants (School)", emoji: "👖" },
+          { id: "shorts_school", name: "Shorts (School)", emoji: "🩳" },
+          { id: "hat_school", name: "Hat (School)", emoji: "🧢" },
+          { id: "jacket_school", name: "Jacket (School)", emoji: "🫱" },
+        ];
+        const resolvedItems = (submission.items || []).map(id => {
+          const p = ALL_PRODUCTS.find(p => p.id === id);
+          return p ? `${p.emoji} ${p.name}` : id;
+        });
+
+        try {
+          await base44.functions.invoke("sendDeliveryEmail", {
+            submissionId: submission.id,
+            childName: submission.child_name || "Student",
+            items: resolvedItems,
+            recipientEmail,
+          });
+          toast({ title: "📧 Email sent!", description: `Delivery notification sent to ${recipientEmail || "student"}.` });
+        } catch (e) {
+          toast({ title: "Email failed", description: e.message, variant: "destructive" });
+        }
+      }
+    }
   };
 
   const handleUpdateNotes = async (id, notes) => {
