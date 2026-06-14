@@ -15,19 +15,27 @@ function isTabActive(pathname, tabTo) {
   return pathname.startsWith(tabTo);
 }
 
+// Get the root path for a tab
+function getTabRoot(tabTo) {
+  return tabTo;
+}
+
 export default function BottomNav() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   
-  // Preserve history stack when switching tabs - only reset if already on this tab's root
+  // Tab stack preservation: when switching tabs, replace the current entry
+  // When tapping the same tab twice, reset to that tab's root
   const handleTabChange = (to) => {
     const isActive = isTabActive(pathname, to);
-    if (isActive && pathname === to) {
-      // Already on this tab's root - reset the stack
-      navigate(to, { replace: true });
+    if (isActive) {
+      // Already on this tab - if not at root, go to root; if at root, do nothing
+      if (pathname !== to) {
+        navigate(to, { replace: true });
+      }
     } else {
-      // Switching tabs or navigating within tab - preserve history
-      navigate(to);
+      // Switching to a different tab - replace to avoid building up history
+      navigate(to, { replace: true });
     }
   };
 
