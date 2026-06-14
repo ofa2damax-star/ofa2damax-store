@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import MobileSelect from "@/components/MobileSelect";
 import { base44 } from "@/api/base44Client";
 import { Search, RefreshCw, Printer } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
@@ -58,6 +59,30 @@ export default function CommandCenter() {
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [isPulling, setIsPulling] = useState(false);
+  const [pullY, setPullY] = useState(0);
+  const touchStartY = useRef(0);
+  const scrollRef = useRef(null);
+
+  const handleTouchStart = useCallback((e) => {
+    touchStartY.current = e.touches[0].clientY;
+  }, []);
+
+  const handleTouchMove = useCallback((e) => {
+    const el = scrollRef.current;
+    if (!el || el.scrollTop > 0) return;
+    const delta = e.touches[0].clientY - touchStartY.current;
+    if (delta > 0) setPullY(Math.min(delta * 0.4, 60));
+  }, []);
+
+  const handleTouchEnd = useCallback(async () => {
+    if (pullY >= 50) {
+      setIsPulling(true);
+      await refetch();
+      setIsPulling(false);
+    }
+    setPullY(0);
+  }, [pullY, refetch]);
 
   const { data: submissions = [], isLoading, refetch } = useQuery({
     queryKey: ["selections"],
@@ -71,7 +96,18 @@ export default function CommandCenter() {
 
   const updateMutation = useMutation({
     mutationFn: ({ id, data }) => base44.entities.Selection.update(id, data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["selections"] }),
+    onMutate: async ({ id, data }) => {
+      await queryClient.cancelQueries({ queryKey: ["selections"] });
+      const previous = queryClient.getQueryData(["selections"]);
+      queryClient.setQueryData(["selections"], old =>
+        (old || []).map(s => s.id === id ? { ...s, ...data } : s)
+      );
+      return { previous };
+    },
+    onError: (_err, _vars, ctx) => {
+      if (ctx?.previous) queryClient.setQueryData(["selections"], ctx.previous);
+    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["selections"] }),
   });
 
   const handleUpdateStatus = async (id, status) => {
@@ -243,7 +279,22 @@ export default function CommandCenter() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-6">
+      <div
+        ref={scrollRef}
+        className="max-w-6xl mx-auto px-6 py-6"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        {/* Pull-to-refresh indicator */}
+        {(pullY > 0 || isPulling) && (
+          <div
+            className="flex justify-center items-center transition-all"
+            style={{ height: isPulling ? 48 : pullY, overflow: "hidden" }}
+          >
+            <RefreshCw className={`w-5 h-5 text-primary ${isPulling ? "animate-spin" : ""}`} style={{ transform: `rotate(${pullY * 4}deg)` }} />
+          </div>
+        )}
         {/* Stats */}
         <StatsBar submissions={submissions} />
 
@@ -298,24 +349,18 @@ export default function CommandCenter() {
                 />
               </div>
               <div className="flex gap-2 flex-wrap">
-                <select
+                <MobileSelect
+                  options={CATEGORY_FILTERS}
                   value={categoryFilter}
-                  onChange={e => setCategoryFilter(e.target.value)}
-                  className="text-sm border border-slate-200 rounded-xl px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-primary/40 font-semibold cursor-pointer"
-                >
-                  {CATEGORY_FILTERS.map(f => (
-                    <option key={f.value} value={f.value}>{f.label}</option>
-                  ))}
-                </select>
-                <select
+                  onChange={setCategoryFilter}
+                  className="text-sm px-3 py-2"
+                />
+                <MobileSelect
+                  options={STATUS_FILTERS}
                   value={statusFilter}
-                  onChange={e => setStatusFilter(e.target.value)}
-                  className="text-sm border border-slate-200 rounded-xl px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-primary/40 font-semibold cursor-pointer"
-                >
-                  {STATUS_FILTERS.map(f => (
-                    <option key={f.value} value={f.value}>{f.label}</option>
-                  ))}
-                </select>
+                  onChange={setStatusFilter}
+                  className="text-sm px-3 py-2"
+                />
               </div>
             </div>
 

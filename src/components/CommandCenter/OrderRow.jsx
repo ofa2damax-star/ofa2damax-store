@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp, StickyNote } from "lucide-react";
+import MobileSelect from "@/components/MobileSelect";
 import { Button } from "@/components/ui/button";
 import StatusBadge from "./StatusBadge";
 import CategoryBadge from "./CategoryBadge";
@@ -70,16 +71,11 @@ export default function OrderRow({ submission, onUpdateStatus, onUpdateNotes }) 
         </div>
         <CategoryBadge category={submission.category} />
         <div className="flex items-center gap-2">
-          <select
+          <MobileSelect
+            options={STATUS_OPTIONS}
             value={submission.status || "pending"}
-            onChange={e => { e.stopPropagation(); onUpdateStatus(submission.id, e.target.value); }}
-            onClick={e => e.stopPropagation()}
-            className="text-xs font-bold border border-slate-200 rounded-xl px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer"
-          >
-            {STATUS_OPTIONS.map(o => (
-              <option key={o.value} value={o.value}>{o.label}</option>
-            ))}
-          </select>
+            onChange={val => { onUpdateStatus(submission.id, val); }}
+          />
         </div>
         <span className="text-slate-400 text-xs font-bold">{submission.items?.length || 0} items</span>
         {expanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}

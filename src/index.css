@@ -87,4 +87,9 @@
     @apply bg-background text-foreground font-nunito;
     overscroll-behavior: none;
   }
+
+  button, a, [role="button"], nav, svg {
+    user-select: none;
+    -webkit-user-select: none;
+  }
 }

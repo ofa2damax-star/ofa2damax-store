@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import MobileSelect from "@/components/MobileSelect";
 import { ArrowLeft, Save, CheckCircle2, User, MapPin, School, MessageSquare, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -13,9 +14,9 @@ import {
   AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-const GRADES = ["Kindergarten", "1st Grade", "2nd Grade", "3rd Grade", "4th Grade", "5th Grade", "6th Grade", "7th Grade", "8th Grade", "9th Grade", "10th Grade", "11th Grade", "12th Grade"];
-const CLOTHES_SIZES = ["2T", "3T", "4T", "XS (4-5)", "S (6-7)", "M (8-10)", "L (10-12)", "XL (14-16)", "XXL (18-20)", "Adult XS", "Adult S", "Adult M", "Adult L", "Adult XL", "Adult XXL"];
-const SHOE_SIZES = ["4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12", "13", "1Y", "1.5Y", "2Y", "2.5Y", "3Y", "3.5Y", "4Y", "4.5Y", "5Y", "5.5Y", "6Y", "6.5Y", "7Y"];
+const GRADES = ["Kindergarten", "1st Grade", "2nd Grade", "3rd Grade", "4th Grade", "5th Grade", "6th Grade", "7th Grade", "8th Grade", "9th Grade", "10th Grade", "11th Grade", "12th Grade"].map(g => ({ value: g, label: g }));
+const CLOTHES_SIZES = ["2T", "3T", "4T", "XS (4-5)", "S (6-7)", "M (8-10)", "L (10-12)", "XL (14-16)", "XXL (18-20)", "Adult XS", "Adult S", "Adult M", "Adult L", "Adult XL", "Adult XXL"].map(s => ({ value: s, label: s }));
+const SHOE_SIZES = ["4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12", "13", "1Y", "1.5Y", "2Y", "2.5Y", "3Y", "3.5Y", "4Y", "4.5Y", "5Y", "5.5Y", "6Y", "6.5Y", "7Y"].map(s => ({ value: s, label: s }));
 
 export default function MyProfile() {
   const [saved, setSaved] = useState(false);
@@ -43,14 +44,11 @@ export default function MyProfile() {
 
   const handleSave = async () => {
     setLoading(true);
-    try {
-      await base44.auth.updateMe({ profile: form });
-      setSaved(true);
-      setTimeout(() => setSaved(false), 3000);
-    } catch (e) {
-      // silently ignore
-    }
+    // Optimistic: show saved immediately
+    setSaved(true);
+    await base44.auth.updateMe({ profile: form });
     setLoading(false);
+    setTimeout(() => setSaved(false), 3000);
   };
 
   return (
@@ -120,48 +118,34 @@ export default function MyProfile() {
                 />
               </div>
               <div>
-                <Label htmlFor="grade" className="font-bold text-sm mb-1 block">Grade</Label>
-                <select
-                  id="grade"
+                <Label className="font-bold text-sm mb-1 block">Grade</Label>
+                <MobileSelect
+                  options={[{ value: "", label: "Select grade" }, ...GRADES]}
                   value={form.grade}
-                  onChange={e => handleChange("grade", e.target.value)}
-                  className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-ring"
-                >
-                  <option value="">Select grade</option>
-                  {GRADES.map(g => (
-                    <option key={g} value={g}>{g}</option>
-                  ))}
-                </select>
+                  onChange={val => handleChange("grade", val)}
+                  className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm"
+                  placeholder="Select grade"
+                />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label htmlFor="clothes_size" className="font-bold text-sm mb-1 block">Clothes Size</Label>
-                <select
-                  id="clothes_size"
+                <Label className="font-bold text-sm mb-1 block">Clothes Size</Label>
+                <MobileSelect
+                  options={[{ value: "", label: "Select size" }, ...CLOTHES_SIZES]}
                   value={form.clothes_size}
-                  onChange={e => handleChange("clothes_size", e.target.value)}
-                  className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-ring"
-                >
-                  <option value="">Select size</option>
-                  {CLOTHES_SIZES.map(s => (
-                    <option key={s} value={s}>{s}</option>
-                  ))}
-                </select>
+                  onChange={val => handleChange("clothes_size", val)}
+                  placeholder="Select size"
+                />
               </div>
               <div>
-                <Label htmlFor="shoe_size" className="font-bold text-sm mb-1 block">Shoe Size</Label>
-                <select
-                  id="shoe_size"
+                <Label className="font-bold text-sm mb-1 block">Shoe Size</Label>
+                <MobileSelect
+                  options={[{ value: "", label: "Select size" }, ...SHOE_SIZES]}
                   value={form.shoe_size}
-                  onChange={e => handleChange("shoe_size", e.target.value)}
-                  className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-ring"
-                >
-                  <option value="">Select size</option>
-                  {SHOE_SIZES.map(s => (
-                    <option key={s} value={s}>{s}</option>
-                  ))}
-                </select>
+                  onChange={val => handleChange("shoe_size", val)}
+                  placeholder="Select size"
+                />
               </div>
             </div>
           </div>
