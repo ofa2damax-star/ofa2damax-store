@@ -17,9 +17,30 @@
       "type": "string",
       "enum": [
         "hygiene",
-        "clothes"
+        "clothes",
+        "feminine_hygiene",
+        "school_clothes"
       ],
       "description": "Category of selection"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "in_progress",
+        "ready",
+        "picked_up"
+      ],
+      "default": "pending",
+      "description": "Processing status of the order"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Office notes about this order"
+    },
+    "size_info": {
+      "type": "string",
+      "description": "Size information for clothing items"
     }
   },
   "required": [

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Sparkles, ClipboardList, Phone, Mail } from "lucide-react";
+import { Sparkles, ClipboardList, Phone, Mail, Monitor } from "lucide-react";
 import HomeCategoryCard from "@/components/HomeCategoryCard";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -147,6 +147,14 @@ export default function Home() {
           gradient="bg-gradient-to-br from-emerald-500 to-teal-600"
           delay={0.25}
         />
+      </div>
+
+      {/* Office staff link */}
+      <div className="pb-8 text-center">
+        <Link to="/command-center" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary font-semibold transition-colors">
+          <Monitor className="w-3.5 h-3.5" />
+          Office Command Center
+        </Link>
       </div>
     </div>
   );

@@ -16,6 +16,7 @@ import ResetPassword from '@/pages/ResetPassword';
 import MyProfile from '@/pages/MyProfile';
 import FeminineHygiene from '@/pages/FeminineHygiene';
 import SchoolClothes from '@/pages/SchoolClothes';
+import CommandCenter from '@/pages/CommandCenter';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -50,6 +51,7 @@ const AuthenticatedApp = () => {
         <Route path="/feminine-hygiene" element={<FeminineHygiene />} />
         <Route path="/school-clothes" element={<SchoolClothes />} />
         <Route path="/my-info" element={<MyProfile />} />
+        <Route path="/command-center" element={<CommandCenter />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
