@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { hygieneProducts, clothesProducts } from "@/lib/productData";
+import { hygieneProducts, clothesProducts, sportsProducts } from "@/lib/productData";
 
 const feminineProducts = [
   { id: "pads", name: "Pads", emoji: "🩸" },
@@ -26,6 +26,7 @@ const SECTIONS = [
   { key: "clothes",          label: "Clothes",           emoji: "👕", color: "from-sky-50 to-sky-100",    border: "border-sky-200",    badge: "bg-sky-600",    products: clothesProducts },
   { key: "feminine_hygiene", label: "Feminine Hygiene",  emoji: "🌸", color: "from-pink-50 to-pink-100",  border: "border-pink-200",   badge: "bg-pink-600",   products: feminineProducts },
   { key: "school_clothes",   label: "School Clothes",    emoji: "🏫", color: "from-emerald-50 to-emerald-100", border: "border-emerald-200", badge: "bg-emerald-600", products: schoolProducts },
+  { key: "sports_gear",      label: "Sports & Equipment", emoji: "🏆", color: "from-orange-50 to-orange-100",   border: "border-orange-200",   badge: "bg-orange-600",   products: sportsProducts },
 ];
 
 function countItems(submissions, categoryKey, products) {

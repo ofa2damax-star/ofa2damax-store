@@ -3,6 +3,7 @@ const CATEGORY_CONFIG = {
   clothes:          { label: "Clothes",           emoji: "👕", className: "bg-sky-100 text-sky-800 border-sky-300" },
   feminine_hygiene: { label: "Feminine Hygiene",  emoji: "🌸", className: "bg-pink-100 text-pink-800 border-pink-300" },
   school_clothes:   { label: "School Clothes",    emoji: "🏫", className: "bg-emerald-100 text-emerald-800 border-emerald-300" },
+  sports_gear:      { label: "Sports & Equipment", emoji: "🏆", className: "bg-orange-100 text-orange-800 border-orange-300" },
 };
 
 export default function CategoryBadge({ category }) {

@@ -3,7 +3,7 @@ import { ChevronDown, ChevronUp, StickyNote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import StatusBadge from "./StatusBadge";
 import CategoryBadge from "./CategoryBadge";
-import { hygieneProducts, clothesProducts } from "@/lib/productData";
+import { hygieneProducts, clothesProducts, sportsProducts } from "@/lib/productData";
 import { format } from "date-fns";
 
 const feminineProducts = [
@@ -26,7 +26,7 @@ const schoolProducts = [
   { id: "jacket_school", name: "Jacket", emoji: "🫱" },
 ];
 
-const ALL_PRODUCTS = [...hygieneProducts, ...clothesProducts, ...feminineProducts, ...schoolProducts];
+const ALL_PRODUCTS = [...hygieneProducts, ...clothesProducts, ...feminineProducts, ...schoolProducts, ...sportsProducts];
 
 const STATUS_OPTIONS = [
   { value: "pending",     label: "Pending" },

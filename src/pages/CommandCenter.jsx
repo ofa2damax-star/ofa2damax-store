@@ -13,6 +13,7 @@ const CATEGORY_FILTERS = [
   { value: "clothes",          label: "👕 Clothes" },
   { value: "feminine_hygiene", label: "🌸 Feminine Hygiene" },
   { value: "school_clothes",   label: "🏫 School Clothes" },
+  { value: "sports_gear",      label: "🏆 Sports & Equipment" },
 ];
 
 const STATUS_FILTERS = [

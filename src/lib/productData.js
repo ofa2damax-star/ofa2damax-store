@@ -11,6 +11,24 @@ export const hygieneProducts = [
   { id: "sunscreen", name: "Sunscreen", emoji: "☀️", color: "bg-amber-100", borderColor: "border-amber-300" },
   { id: "deodorant", name: "Deodorant", emoji: "🌸", color: "bg-fuchsia-100", borderColor: "border-fuchsia-300" },
   { id: "nail_clipper", name: "Nail Clipper", emoji: "✂️", color: "bg-slate-100", borderColor: "border-slate-300" },
+  { id: "q_tips", name: "Q-Tips", emoji: "🫧", color: "bg-blue-100", borderColor: "border-blue-300" },
+  { id: "shoe_powder", name: "Shoe Powder", emoji: "👟", color: "bg-gray-100", borderColor: "border-gray-300" },
+  { id: "conditioner", name: "Conditioner", emoji: "💆", color: "bg-violet-100", borderColor: "border-violet-300" },
+  { id: "cologne", name: "Cologne", emoji: "🧴", color: "bg-indigo-100", borderColor: "border-indigo-300" },
+  { id: "perfume", name: "Perfume", emoji: "🌷", color: "bg-pink-100", borderColor: "border-pink-300" },
+];
+
+export const sportsProducts = [
+  { id: "sports_cleats", name: "Cleats", emoji: "⚽", color: "bg-green-100", borderColor: "border-green-300" },
+  { id: "sports_tshirt", name: "Sports T-Shirt", emoji: "👕", color: "bg-sky-100", borderColor: "border-sky-300" },
+  { id: "sports_shorts", name: "Sports Shorts", emoji: "🩳", color: "bg-blue-100", borderColor: "border-blue-300" },
+  { id: "sports_socks", name: "Sports Socks", emoji: "🧦", color: "bg-red-100", borderColor: "border-red-300" },
+  { id: "sports_bag", name: "Sports Bag", emoji: "🎒", color: "bg-orange-100", borderColor: "border-orange-300" },
+  { id: "sports_water_bottle", name: "Water Bottle", emoji: "🥤", color: "bg-cyan-100", borderColor: "border-cyan-300" },
+  { id: "sports_helmet", name: "Helmet", emoji: "⛑️", color: "bg-yellow-100", borderColor: "border-yellow-300" },
+  { id: "sports_gloves", name: "Sports Gloves", emoji: "🥊", color: "bg-amber-100", borderColor: "border-amber-300" },
+  { id: "sports_knee_pads", name: "Knee Pads", emoji: "🦵", color: "bg-teal-100", borderColor: "border-teal-300" },
+  { id: "sports_equipment", name: "Equipment Needed", emoji: "🏆", color: "bg-lime-100", borderColor: "border-lime-300" },
 ];
 
 export const clothesProducts = [

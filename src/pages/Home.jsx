@@ -147,6 +147,14 @@ export default function Home() {
           gradient="bg-gradient-to-br from-emerald-500 to-teal-600"
           delay={0.25}
         />
+        <HomeCategoryCard
+          title="Sports & Equipment"
+          emoji="🏆"
+          description="Cleats, gear & equipment needed"
+          to="/sports-gear"
+          gradient="bg-gradient-to-br from-orange-500 to-amber-500"
+          delay={0.3}
+        />
       </div>
 
       {/* Office staff link */}

@@ -17,6 +17,7 @@ import MyProfile from '@/pages/MyProfile';
 import FeminineHygiene from '@/pages/FeminineHygiene';
 import SchoolClothes from '@/pages/SchoolClothes';
 import CommandCenter from '@/pages/CommandCenter';
+import SportsGear from '@/pages/SportsGear';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -50,6 +51,7 @@ const AuthenticatedApp = () => {
         <Route path="/clothes" element={<ClothesProducts />} />
         <Route path="/feminine-hygiene" element={<FeminineHygiene />} />
         <Route path="/school-clothes" element={<SchoolClothes />} />
+        <Route path="/sports-gear" element={<SportsGear />} />
         <Route path="/my-info" element={<MyProfile />} />
         <Route path="/command-center" element={<CommandCenter />} />
       </Route>
