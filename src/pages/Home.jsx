@@ -13,8 +13,8 @@ export default function Home() {
       <div
         className="fixed inset-0 z-0 pointer-events-none select-none overflow-hidden"
         aria-hidden="true"
+        style={{ background: "black" }}
       >
-        {/* Paw grid - alternating green and yellow */}
         {Array.from({ length: 80 }).map((_, i) => {
           const col = i % 8;
           const row = Math.floor(i / 8);
@@ -22,16 +22,15 @@ export default function Home() {
           return (
             <span
               key={i}
-              className="absolute text-2xl"
+              className="absolute"
               style={{
-                left: `${(col / 8) * 100 + 6}%`,
-                top: `${(row / 10) * 100 + 5}%`,
-                opacity: 0.18,
-                fontSize: "2rem",
-                filter: isGreen
-                  ? "sepia(1) saturate(4) hue-rotate(80deg) brightness(0.7)"
-                  : "sepia(1) saturate(8) hue-rotate(10deg) brightness(1.3)",
-                transform: `rotate(${(i * 37) % 360}deg)`,
+                left: `${(col / 8) * 100 + 2}%`,
+                top: `${(row / 10) * 100 + 1}%`,
+                opacity: 0.35,
+                fontSize: "2.2rem",
+                color: isGreen ? "#2d6a2d" : "#c8a800",
+                transform: `rotate(${(i * 43) % 360}deg)`,
+                lineHeight: 1,
               }}
             >
               🐾
