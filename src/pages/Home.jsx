@@ -18,7 +18,7 @@ export default function Home() {
           className="absolute inset-0 pointer-events-none"
           style={{
             backgroundImage: `url(https://media.base44.com/images/public/6a1b94aa3da2d1391351474e/c3fa25a5d_Image1.jpg)`,
-            backgroundSize: "contain",
+            backgroundSize: "100% 100%",
             backgroundPosition: "center top",
             backgroundRepeat: "no-repeat",
             opacity: 0.55,
