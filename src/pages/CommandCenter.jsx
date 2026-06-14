@@ -1,7 +1,33 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
-import { Search, RefreshCw } from "lucide-react";
+import { Search, RefreshCw, Printer } from "lucide-react";
+import { hygieneProducts, clothesProducts, sportsProducts } from "@/lib/productData";
+
+const ALL_PRODUCTS = [
+  ...hygieneProducts,
+  ...clothesProducts,
+  ...sportsProducts,
+  { id: "pads", name: "Pads", emoji: "🩸" },
+  { id: "tampons", name: "Tampons", emoji: "🌸" },
+  { id: "panty_liners", name: "Panty Liners", emoji: "💜" },
+  { id: "pain_relief", name: "Pain Relief", emoji: "💊" },
+  { id: "heating_pad", name: "Heating Pad", emoji: "🔥" },
+  { id: "wipes", name: "Wipes", emoji: "🧻" },
+  { id: "underwear_fem", name: "Period Underwear", emoji: "🩲" },
+  { id: "chocolate", name: "Chocolate", emoji: "🍫" },
+  { id: "tshirt_school", name: "T-Shirt (School)", emoji: "👕" },
+  { id: "hoodie_school", name: "Hoodie (School)", emoji: "🧥" },
+  { id: "pants_school", name: "Pants (School)", emoji: "👖" },
+  { id: "shorts_school", name: "Shorts (School)", emoji: "🩳" },
+  { id: "hat_school", name: "Hat (School)", emoji: "🧢" },
+  { id: "jacket_school", name: "Jacket (School)", emoji: "🫱" },
+];
+
+function resolveItem(id) {
+  const p = ALL_PRODUCTS.find(p => p.id === id);
+  return p ? `${p.emoji} ${p.name}` : id;
+}
 import { Button } from "@/components/ui/button";
 import StatsBar from "@/components/CommandCenter/StatsBar";
 import OrderRow from "@/components/CommandCenter/OrderRow";
@@ -50,6 +76,63 @@ export default function CommandCenter() {
     queryClient.invalidateQueries({ queryKey: ["selections"] });
   };
 
+  const handlePrint = () => {
+    const printable = submissions.filter(s => (s.status || "pending") !== "picked_up");
+    const grouped = {};
+    printable.forEach(s => {
+      const name = s.child_name || "Unknown Student";
+      if (!grouped[name]) grouped[name] = [];
+      grouped[name].push(s);
+    });
+
+    const html = `
+      <html>
+      <head>
+        <title>OFA2DAMAX Packing List</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 20px; color: #111; }
+          h1 { font-size: 22px; margin-bottom: 4px; }
+          .subtitle { font-size: 12px; color: #666; margin-bottom: 24px; }
+          .student { page-break-inside: avoid; margin-bottom: 28px; border: 1px solid #ddd; border-radius: 8px; padding: 14px; }
+          .student-name { font-size: 18px; font-weight: bold; margin-bottom: 6px; }
+          .order { margin-bottom: 10px; }
+          .category { font-size: 11px; font-weight: bold; text-transform: uppercase; color: #555; margin-bottom: 4px; }
+          ul { margin: 0; padding-left: 20px; }
+          li { font-size: 14px; margin-bottom: 2px; }
+          .size { font-size: 12px; color: #444; margin-top: 4px; font-style: italic; }
+          .notes { font-size: 12px; color: #555; margin-top: 4px; background: #f5f5f5; padding: 6px 8px; border-radius: 4px; }
+          .checkbox { display: inline-block; width: 14px; height: 14px; border: 1px solid #333; margin-right: 6px; vertical-align: middle; }
+          @media print { body { padding: 10px; } }
+        </style>
+      </head>
+      <body>
+        <h1>📦 OFA2DAMAX Packing List</h1>
+        <div class="subtitle">Generated ${new Date().toLocaleDateString()} — ${printable.length} orders (excluding picked up)</div>
+        ${Object.entries(grouped).map(([name, orders]) => `
+          <div class="student">
+            <div class="student-name">👤 ${name}</div>
+            ${orders.map(o => `
+              <div class="order">
+                <div class="category">${o.category?.replace(/_/g, " ")} · Status: ${o.status || "pending"}</div>
+                <ul>
+                  ${(o.items || []).map(id => `<li><span class="checkbox"></span>${resolveItem(id)}</li>`).join("")}
+                </ul>
+                ${o.size_info ? `<div class="size">📏 Size info: ${o.size_info}</div>` : ""}
+                ${o.notes ? `<div class="notes">📝 ${o.notes}</div>` : ""}
+              </div>
+            `).join("")}
+          </div>
+        `).join("")}
+      </body>
+      </html>
+    `;
+
+    const win = window.open("", "_blank");
+    win.document.write(html);
+    win.document.close();
+    win.print();
+  };
+
   const filtered = submissions.filter(s => {
     const matchSearch = !search || (s.child_name || "").toLowerCase().includes(search.toLowerCase());
     const matchCategory = categoryFilter === "all" || s.category === categoryFilter;
@@ -72,9 +155,14 @@ export default function CommandCenter() {
             <p className="text-xs text-slate-400 font-semibold">OFA2DAMAX — Office Dashboard</p>
           </div>
         </div>
-        <Button variant="outline" size="sm" onClick={() => refetch()} className="gap-2 rounded-xl">
-          <RefreshCw className="w-4 h-4" /> Refresh
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={handlePrint} className="gap-2 rounded-xl">
+            <Printer className="w-4 h-4" /> Print Packing List
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => refetch()} className="gap-2 rounded-xl">
+            <RefreshCw className="w-4 h-4" /> Refresh
+          </Button>
+        </div>
       </div>
 
       <div className="max-w-6xl mx-auto px-6 py-6">
