@@ -8,8 +8,37 @@ import PanicButton from "@/components/PanicButton";
 export default function Home() {
   return (
     <div className="min-h-screen bg-background relative">
-      {/* Black background base */}
+      {/* Black background base with cougar paw pattern */}
       <div className="fixed inset-0 bg-black z-0" />
+      <div
+        className="fixed inset-0 z-0 pointer-events-none select-none overflow-hidden"
+        aria-hidden="true"
+      >
+        {/* Paw grid - alternating green and yellow */}
+        {Array.from({ length: 80 }).map((_, i) => {
+          const col = i % 8;
+          const row = Math.floor(i / 8);
+          const isGreen = (col + row) % 2 === 0;
+          return (
+            <span
+              key={i}
+              className="absolute text-2xl"
+              style={{
+                left: `${(col / 8) * 100 + 6}%`,
+                top: `${(row / 10) * 100 + 5}%`,
+                opacity: 0.18,
+                fontSize: "2rem",
+                filter: isGreen
+                  ? "sepia(1) saturate(4) hue-rotate(80deg) brightness(0.7)"
+                  : "sepia(1) saturate(8) hue-rotate(10deg) brightness(1.3)",
+                transform: `rotate(${(i * 37) % 360}deg)`,
+              }}
+            >
+              🐾
+            </span>
+          );
+        })}
+      </div>
 
       {/* Hero */}
       <div className="relative overflow-hidden px-4 pt-10 pb-6 md:pt-14 md:pb-8 z-10 bg-green-800" style={{ minHeight: "320px" }}>
@@ -38,8 +67,8 @@ export default function Home() {
           >
             🐾
           </motion.div>
-          <p className="text-sm font-black uppercase tracking-widest text-yellow-400 mb-1">Kearns High School</p>
-          <h1 className="text-3xl md:text-4xl font-black text-yellow-400 mb-2">
+          <p className="text-sm font-black uppercase tracking-widest text-yellow-300 mb-1" style={{color: "#FFD700", textShadow: "0 1px 4px rgba(0,0,0,0.8)"}}>Kearns High School</p>
+          <h1 className="text-3xl md:text-4xl font-black mb-2" style={{color: "#FFD700", textShadow: "0 2px 8px rgba(0,0,0,0.9)"}}>
             Pick Your Stuff!
           </h1>
           <p className="text-yellow-300 font-semibold text-base md:text-lg flex items-center justify-center gap-2">
