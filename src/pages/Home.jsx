@@ -7,9 +7,21 @@ import PanicButton from "@/components/PanicButton";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative">
+      {/* Full-page N&N logo watermark background */}
+      <div
+        className="fixed inset-0 pointer-events-none z-0"
+        style={{
+          backgroundImage: `url(https://media.base44.com/images/public/6a1b94aa3da2d1391351474e/c3fa25a5d_Image1.jpg)`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          opacity: 0.08,
+        }}
+      />
+
       {/* Hero */}
-      <div className="relative overflow-hidden px-4 pt-10 pb-6 md:pt-14 md:pb-8">
+      <div className="relative overflow-hidden px-4 pt-10 pb-6 md:pt-14 md:pb-8 z-10">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -62,12 +74,12 @@ export default function Home() {
       </div>
 
       {/* Business Header */}
-      <div className="px-4 max-w-lg mx-auto -mt-2 mb-2">
+      <div className="px-4 max-w-lg mx-auto -mt-2 mb-2 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="bg-gradient-to-br from-primary/10 to-accent/20 rounded-3xl p-5 border border-primary/20 text-center"
+          className="bg-gradient-to-br from-green-50 to-yellow-50 rounded-3xl p-5 border-2 border-green-300 text-center shadow-lg"
         >
           <div className="flex items-center justify-center gap-4 mb-2">
             <img
@@ -113,14 +125,17 @@ export default function Home() {
       {/* Emergency Panic Button - fixed right side, double tap to call */}
       <PanicButton />
 
+      {/* Cougar */}
+      <div className="text-center text-5xl mb-1 relative z-10" title="Go Cougars!">🐆</div>
+
       {/* Categories */}
-      <div className="px-4 pb-12 max-w-lg mx-auto space-y-4">
+      <div className="px-4 pb-12 max-w-lg mx-auto space-y-4 relative z-10">
         <HomeCategoryCard
           title="Hygiene Products"
           emoji="🧼"
           description="Toothbrush, soap, shampoo & more"
           to="/hygiene"
-          gradient="bg-gradient-to-br from-purple-500 to-pink-500"
+          gradient="bg-gradient-to-br from-green-600 to-green-700"
           delay={0.1}
         />
         <HomeCategoryCard
@@ -128,7 +143,7 @@ export default function Home() {
           emoji="🌸"
           description="Pads, tampons & period care"
           to="/feminine-hygiene"
-          gradient="bg-gradient-to-br from-pink-400 to-rose-500"
+          gradient="bg-gradient-to-br from-yellow-400 to-yellow-500"
           delay={0.15}
         />
         <HomeCategoryCard
@@ -136,7 +151,7 @@ export default function Home() {
           emoji="👕"
           description="Shirts, pants, shoes & more"
           to="/clothes"
-          gradient="bg-gradient-to-br from-sky-500 to-indigo-500"
+          gradient="bg-gradient-to-br from-green-500 to-yellow-400"
           delay={0.2}
         />
         <HomeCategoryCard
@@ -144,7 +159,7 @@ export default function Home() {
           emoji="🏫"
           description="Uniforms & clothes with school logo"
           to="/school-clothes"
-          gradient="bg-gradient-to-br from-emerald-500 to-teal-600"
+          gradient="bg-gradient-to-br from-yellow-500 to-green-600"
           delay={0.25}
         />
         <HomeCategoryCard
@@ -152,13 +167,13 @@ export default function Home() {
           emoji="🏆"
           description="Cleats, gear & equipment needed"
           to="/sports-gear"
-          gradient="bg-gradient-to-br from-orange-500 to-amber-500"
+          gradient="bg-gradient-to-br from-green-700 to-yellow-500"
           delay={0.3}
         />
       </div>
 
       {/* Office staff link */}
-      <div className="pb-8 text-center">
+      <div className="pb-8 text-center relative z-10">
         <Link to="/command-center" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary font-semibold transition-colors">
           <Monitor className="w-3.5 h-3.5" />
           Office Command Center
