@@ -33,14 +33,15 @@ export default function Home() {
             transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
             className="text-6xl md:text-7xl mb-3 inline-block"
           >
-            🌟
+            🐾
           </motion.div>
+          <p className="text-sm font-black uppercase tracking-widest text-primary mb-1">Kearns High School</p>
           <h1 className="text-3xl md:text-4xl font-black text-foreground mb-2">
             Pick Your Stuff!
           </h1>
           <p className="text-muted-foreground font-semibold text-base md:text-lg flex items-center justify-center gap-2">
             <Sparkles className="w-4 h-4 text-accent" />
-            Choose your favorite items
+            Go Cougars! 🐆
             <Sparkles className="w-4 h-4 text-accent" />
           </p>
 
