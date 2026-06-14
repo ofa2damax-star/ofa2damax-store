@@ -67,8 +67,8 @@ export default function SubmitConfirmation({ isOpen, onClose, selectedProducts, 
               transition={{ delay: 0.2, type: "spring", stiffness: 300 }}
               className="flex justify-center mb-4"
             >
-              <div className="bg-green-100 rounded-full p-4">
-                <CheckCircle2 className="w-12 h-12 text-green-500" />
+              <div className="bg-primary/20 rounded-full p-4">
+                <CheckCircle2 className="w-12 h-12 text-primary" />
               </div>
             </motion.div>
 

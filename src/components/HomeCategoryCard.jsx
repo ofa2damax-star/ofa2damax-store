@@ -18,8 +18,8 @@ export default function HomeCategoryCard({ title, emoji, description, to, gradie
           <div className="relative z-10">
             <span className="text-6xl md:text-7xl block mb-4 drop-shadow-md">{emoji}</span>
             <h2 className="text-xl md:text-2xl font-extrabold text-white mb-1">{title}</h2>
-            <p className="text-white/80 text-sm font-semibold">{description}</p>
-            <div className="flex items-center gap-1 mt-4 text-white/90 font-bold text-sm">
+            <p className="text-white/90 text-sm font-semibold">{description}</p>
+            <div className="flex items-center gap-1 mt-4 text-white font-bold text-sm">
               Let's go! <ChevronRight className="w-4 h-4" />
             </div>
           </div>

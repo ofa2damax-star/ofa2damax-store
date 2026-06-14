@@ -28,7 +28,7 @@ export default function BottomNav() {
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-xl border-t border-yellow-400/30 flex select-none"
+      className="fixed bottom-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-xl border-t border-border flex select-none"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       {tabs.map(({ key, label, icon: Icon, to }, index) => {
@@ -40,11 +40,11 @@ export default function BottomNav() {
             aria-label={label}
             aria-current={active ? "page" : undefined}
             className={`flex-1 flex flex-col items-center justify-center py-2 gap-0.5 transition-colors ${
-              active ? "text-yellow-400" : "text-gray-500"
+              active ? "text-accent" : "text-muted-foreground"
             }`}
           >
             <Icon className={`w-5 h-5 ${active ? "stroke-[2.5px]" : ""}`} aria-hidden="true" />
-            <span className={`text-xs font-black uppercase tracking-wide ${active ? "text-yellow-400" : "text-gray-500"}`}>
+            <span className={`text-xs font-black uppercase tracking-wide ${active ? "text-accent" : "text-muted-foreground"}`}>
               {label}
             </span>
           </button>
