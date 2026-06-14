@@ -5,15 +5,16 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import PanicButton from "@/components/PanicButton";
 import PullToRefresh from "@/components/PullToRefresh";
+import LazyImage from "@/components/LazyImage";
 
 export default function Home() {
   return (
-    <PullToRefresh onRefresh={() => Promise.resolve()} className="min-h-screen">
-    <div className="min-h-screen bg-background relative">
+    <PullToRefresh onRefresh={() => Promise.resolve()} className="min-h-screen safe-inset">
+    <div className="min-h-screen bg-background relative safe-viewport">
       {/* Black background base with cougar paw pattern */}
       <div className="fixed inset-0 bg-black z-0" />
       <div
-        className="fixed inset-0 z-0 pointer-events-none select-none overflow-hidden"
+        className="fixed inset-0 z-0 pointer-events-none select-none overflow-hidden lazy-load"
         aria-hidden="true"
         style={{ background: "black" }}
       >
@@ -42,10 +43,10 @@ export default function Home() {
       </div>
 
       {/* Hero */}
-      <div className="relative overflow-hidden px-4 pt-10 pb-6 md:pt-14 md:pb-8 z-10 bg-green-800" style={{ minHeight: "320px" }}>
+      <div className="relative overflow-hidden px-4 pt-10 pb-6 md:pt-14 md:pb-8 z-10 bg-green-800 safe-viewport" style={{ minHeight: "320px" }}>
         {/* N&N logo filling the hero background */}
         <div
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0 pointer-events-none lazy-load"
           style={{
             backgroundImage: `url(https://media.base44.com/images/public/6a1b94aa3da2d1391351474e/c3fa25a5d_Image1.jpg)`,
             backgroundSize: "100% 100%",
@@ -112,14 +113,15 @@ export default function Home() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.05 }}
-        className="w-full bg-green-700 border-b-4 border-yellow-400 relative z-10 mb-4 shadow-xl"
+        className="w-full bg-green-700 border-b-4 border-yellow-400 relative z-10 mb-4 shadow-xl safe-viewport"
       >
         <div className="flex items-center justify-between px-4 py-3 max-w-2xl mx-auto">
           {/* OFA2DAMAX logo left */}
-          <img
+          <LazyImage
             src="https://media.base44.com/images/public/6a1b94aa3da2d1391351474e/8eb0be84a_65D4C14F-6DC7-4C0B-8C73-800AAAD84CF4.jpeg"
             alt="OFA2DAMAX Logo"
-            className="w-16 h-16 object-contain rounded-xl"
+            className="w-16 h-16 rounded-xl"
+            aspectRatio="1"
           />
 
           {/* Center text */}
@@ -138,10 +140,11 @@ export default function Home() {
 
           {/* OFAS logo right */}
           <div className="flex flex-col items-center gap-0.5">
-            <img
+            <LazyImage
               src="https://media.base44.com/images/public/6a1b94aa3da2d1391351474e/8eb0be84a_65D4C14F-6DC7-4C0B-8C73-800AAAD84CF4.jpeg"
               alt="OFAS"
-              className="w-16 h-16 object-contain rounded-xl"
+              className="w-16 h-16 rounded-xl"
+              aspectRatio="1"
             />
             <span className="text-yellow-300 text-xs font-black tracking-widest uppercase">OFAS</span>
           </div>

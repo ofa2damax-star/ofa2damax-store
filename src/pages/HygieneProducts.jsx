@@ -22,7 +22,7 @@ export default function HygieneProducts() {
 
   return (
     <PullToRefresh onRefresh={() => Promise.resolve()}>
-    <div className="min-h-screen bg-background pb-8">
+    <div className="min-h-screen bg-background pb-8 safe-inset">
       <CategoryHeader
         title="Hygiene Products"
         emoji="🧼"
@@ -30,7 +30,7 @@ export default function HygieneProducts() {
         onViewPicks={() => setDrawerOpen(true)}
       />
 
-      <div className="px-4 pt-5 max-w-2xl mx-auto">
+      <div className="px-4 pt-5 max-w-2xl mx-auto safe-viewport">
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

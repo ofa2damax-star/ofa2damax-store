@@ -86,10 +86,47 @@
   body {
     @apply bg-background text-foreground font-nunito;
     overscroll-behavior: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   button, a, [role="button"], nav, svg {
     user-select: none;
     -webkit-user-select: none;
+  }
+
+  /* Safe area insets for modern iOS devices */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-left {
+    padding-left: env(safe-area-inset-left);
+  }
+
+  .safe-right {
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .safe-inset {
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+
+  /* Prevent content from going under notches */
+  .safe-viewport {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+@layer utilities {
+  /* Lazy loading optimizations */
+  .lazy-load {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 500px;
   }
 }

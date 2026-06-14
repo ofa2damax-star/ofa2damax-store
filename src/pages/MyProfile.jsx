@@ -112,8 +112,8 @@ export default function MyProfile() {
       subtitle="Your personal information"
       icon={<User className="w-8 h-8 text-primary" />}
     >
-      <PullToRefresh onRefresh={() => queryClient.invalidateQueries({ queryKey: ['user-profile'] })}>
-        <div className="space-y-6 pb-8">
+      <PullToRefresh onRefresh={() => queryClient.invalidateQueries({ queryKey: ['user-profile'] })} className="safe-inset">
+        <div className="space-y-6 pb-8 safe-viewport">
           {/* Personal Info Section */}
           <div className="space-y-4">
             <h3 className="text-lg font-bold text-primary mb-3">Personal Information</h3>

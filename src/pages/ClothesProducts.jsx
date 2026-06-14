@@ -22,7 +22,7 @@ export default function ClothesProducts() {
 
   return (
     <PullToRefresh onRefresh={() => Promise.resolve()}>
-    <div className="min-h-screen bg-background pb-8">
+    <div className="min-h-screen bg-background pb-8 safe-inset">
       <CategoryHeader
         title="Clothes"
         emoji="👕"

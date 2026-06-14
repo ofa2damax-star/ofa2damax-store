@@ -51,7 +51,7 @@ export default function SchoolClothes() {
 
   return (
     <PullToRefresh onRefresh={() => Promise.resolve()}>
-    <div className="min-h-screen bg-background pb-8">
+    <div className="min-h-screen bg-background pb-8 safe-inset">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-xl border-b border-border/50 px-4 py-3">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
