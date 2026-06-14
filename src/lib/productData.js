@@ -19,16 +19,16 @@ export const hygieneProducts = [
 ];
 
 export const sportsProducts = [
-  { id: "sports_cleats", name: "Cleats", emoji: "⚽", color: "bg-green-100", borderColor: "border-green-500" },
-  { id: "sports_tshirt", name: "Sports T-Shirt", emoji: "👕", color: "bg-yellow-100", borderColor: "border-yellow-500" },
-  { id: "sports_shorts", name: "Sports Shorts", emoji: "🩳", color: "bg-green-50", borderColor: "border-green-400" },
-  { id: "sports_socks", name: "Sports Socks", emoji: "🧦", color: "bg-yellow-50", borderColor: "border-yellow-400" },
-  { id: "sports_bag", name: "Sports Bag", emoji: "🎒", color: "bg-green-100", borderColor: "border-green-500" },
-  { id: "sports_water_bottle", name: "Water Bottle", emoji: "🥤", color: "bg-yellow-100", borderColor: "border-yellow-500" },
-  { id: "sports_helmet", name: "Helmet", emoji: "⛑️", color: "bg-green-50", borderColor: "border-green-400" },
-  { id: "sports_gloves", name: "Sports Gloves", emoji: "🥊", color: "bg-yellow-50", borderColor: "border-yellow-400" },
-  { id: "sports_knee_pads", name: "Knee Pads", emoji: "🦵", color: "bg-green-100", borderColor: "border-green-500" },
-  { id: "sports_equipment", name: "Equipment Needed", emoji: "🏆", color: "bg-yellow-100", borderColor: "border-yellow-500" },
+  { id: "sports_cleats", name: "Cleats", emoji: "⚽", color: "bg-green-700", borderColor: "border-yellow-400" },
+  { id: "sports_tshirt", name: "Sports T-Shirt", emoji: "👕", color: "bg-yellow-400", borderColor: "border-green-700" },
+  { id: "sports_shorts", name: "Sports Shorts", emoji: "🩳", color: "bg-green-800", borderColor: "border-yellow-400" },
+  { id: "sports_socks", name: "Sports Socks", emoji: "🧦", color: "bg-yellow-400", borderColor: "border-green-700" },
+  { id: "sports_bag", name: "Sports Bag", emoji: "🎒", color: "bg-green-700", borderColor: "border-yellow-400" },
+  { id: "sports_water_bottle", name: "Water Bottle", emoji: "🥤", color: "bg-yellow-400", borderColor: "border-green-700" },
+  { id: "sports_helmet", name: "Helmet", emoji: "⛑️", color: "bg-green-800", borderColor: "border-yellow-400" },
+  { id: "sports_gloves", name: "Sports Gloves", emoji: "🥊", color: "bg-yellow-400", borderColor: "border-green-700" },
+  { id: "sports_knee_pads", name: "Knee Pads", emoji: "🦵", color: "bg-green-700", borderColor: "border-yellow-400" },
+  { id: "sports_equipment", name: "Equipment Needed", emoji: "🏆", color: "bg-yellow-400", borderColor: "border-green-700" },
 ];
 
 export const clothesProducts = [
