@@ -18,10 +18,10 @@ export default function Home() {
           className="absolute inset-0 pointer-events-none"
           style={{
             backgroundImage: `url(https://media.base44.com/images/public/6a1b94aa3da2d1391351474e/c3fa25a5d_Image1.jpg)`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+            backgroundSize: "contain",
+            backgroundPosition: "center top",
             backgroundRepeat: "no-repeat",
-            opacity: 0.25,
+            opacity: 0.55,
           }}
         />
         <motion.div
@@ -82,7 +82,7 @@ export default function Home() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.05 }}
-        className="w-full bg-green-700 border-b-4 border-yellow-400 relative z-10 -mt-2 mb-4 shadow-xl"
+        className="w-full bg-green-700 border-b-4 border-yellow-400 relative z-10 mb-4 shadow-xl"
       >
         <div className="flex items-center justify-between px-4 py-3 max-w-2xl mx-auto">
           {/* OFA2DAMAX logo left */}
