@@ -24,7 +24,7 @@ export default function ProductCard({ product, isSelected, onToggle }) {
         </motion.div>
       )}
       <span className="text-4xl md:text-5xl drop-shadow-sm">{product.emoji}</span>
-      <span className="text-xs md:text-sm font-bold text-foreground/80 text-center leading-tight">
+      <span className="text-xs md:text-sm font-bold text-slate-800 text-center leading-tight">
         {product.name}
       </span>
     </motion.button>
